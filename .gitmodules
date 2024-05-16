@@ -1,0 +1,3 @@
+[submodule "pulsefeed-common"]
+	path = pulsefeed-common
+	url = git@github.com:yosemiteyss/pulsefeed-common.git
