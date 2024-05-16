@@ -1,0 +1,809 @@
+<?xml version="1.0"?>
+<rss version="2.0" xml:base="link" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:media="http://www.rssboard.org/media-rss">
+    <channel>
+        <title>News - South China Morning Post</title>
+        <link>https://www.scmp.com/rss/91/feed</link>
+        <description>All the latest breaking news from Hong Kong, China and around the world</description>
+        <language>en</language>
+        <image>
+            <url>https://assets.i-scmp.com/static/img/icons/scmp-meta-1200x630.png</url>
+            <title>News - South China Morning Post</title>
+            <link>https://www.scmp.com</link>
+        </image>
+        <atom:link href="https://www.scmp.com/rss/91/feed" rel="self" type="application/rss+xml"/>
+        <item>
+            <title>Hong Kong customs shuts down 2 online stores selling fake luxury goods worth HK$920,000; 2 arrested</title>
+            <link>https://www.scmp.com/news/hong-kong/law-and-crime/article/3262013/hong-kong-customs-shuts-down-2-online-stores-selling-fake-luxury-goods-worth-hk920000-2-arrested?utm_source=rss_feed</link>
+            <description>Customs officers arrest two people, with consumers warned fake cosmetic products and perfumes could pose health and safety risks.</description>
+            <pubDate>Thu, 09 May 2024 15:56:44 +0800</pubDate>
+            <dc:creator>Clifford Lo</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/hong-kong/law-and-crime/article/3262013/hong-kong-customs-shuts-down-2-online-stores-selling-fake-luxury-goods-worth-hk920000-2-arrested?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/890b0fe6-684f-459d-88e5-2bb7a35895a7_3929ac31.jpg?itok=nKcEBw6G"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Clifford Lo</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/890b0fe6-684f-459d-88e5-2bb7a35895a7_3929ac31.jpg?itok=nKcEBw6G"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Hundreds of campuses in Indonesia inspired by global student protests to renew rallies against Israel</title>
+            <link>https://www.scmp.com/week-asia/politics/article/3262009/hundreds-campuses-indonesia-inspired-global-student-protests-renew-rallies-against-israel?utm_source=rss_feed</link>
+            <description>It was the latest demonstration of the country&#x2019;s strong support for Palestinians, which has also driven a boycott movement that has taken a toll on targeted businesses.</description>
+            <pubDate>Thu, 09 May 2024 15:39:22 +0800</pubDate>
+            <dc:creator>Johannes Nugroho</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/week-asia/politics/article/3262009/hundreds-campuses-indonesia-inspired-global-student-protests-renew-rallies-against-israel?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2024/05/01/WEB_0.mp4" duration="114"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/05/01/CLEAN-THUMB.jpg?itok=NjxLaWXJ"/>
+            <author>Johannes Nugroho</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2024/05/01/WEB_0.mp4" length="114"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/05/01/CLEAN-THUMB.jpg?itok=NjxLaWXJ"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>City of Plum Blossom: how a stone fortress in China survived 500 years of war with Japanese invaders</title>
+            <link>https://www.scmp.com/news/china/science/article/3261964/city-plum-blossom-how-stone-fortress-china-survived-500-years-war-japanese-invaders?utm_source=rss_feed</link>
+            <description>Scientists are studying China&#x2019;s Meihua Fortress to see how it managed to withstand repeated attacks over centuries.</description>
+            <pubDate>Thu, 09 May 2024 15:31:19 +0800</pubDate>
+            <dc:creator>Stephen Chen</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/china/science/article/3261964/city-plum-blossom-how-stone-fortress-china-survived-500-years-war-japanese-invaders?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2023/06/14/WEB_VERSION.mp4" duration="100"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2023/06/14/CLEAN_THUMB.jpg?itok=vv2pBtjy"/>
+            <author>Stephen Chen</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2023/06/14/WEB_VERSION.mp4" length="100"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2023/06/14/CLEAN_THUMB.jpg?itok=vv2pBtjy"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Hong Kong works on an ETF of HKEX stocks for Tadawul exchange in push for collaboration with Saudi Arabia</title>
+            <link>https://www.scmp.com/business/banking-finance/article/3262007/tadawul-listed-fund-hkex-stocks-works-hong-kong-riyadh-create-financial-products-foster?utm_source=rss_feed</link>
+            <description>The new financial product underscores the flurry of collaborations and accords between Hong Kong and Riyadh since the February 2023 visit by Chief Executive John Lee Ka-chiu to the kingdom.</description>
+            <pubDate>Thu, 09 May 2024 15:28:06 +0800</pubDate>
+            <dc:creator>Aileen Chuang,Enoch Yiu,Mia Castagnone</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/business/banking-finance/article/3262007/tadawul-listed-fund-hkex-stocks-works-hong-kong-riyadh-create-financial-products-foster?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/fcd97540-6f43-4720-ad32-2bcd9079302f_fa530c81.jpg?itok=IPfhpthJ"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Aileen Chuang,Enoch Yiu,Mia Castagnone</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/fcd97540-6f43-4720-ad32-2bcd9079302f_fa530c81.jpg?itok=IPfhpthJ"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>South China Sea: Philippines says &#x2018;not turning against&#x2019; Beijing, economy doing well despite maritime feud</title>
+            <link>https://www.scmp.com/news/asia/southeast-asia/article/3262006/south-china-sea-philippines-says-not-turning-against-beijing-economy-doing-well-despite-maritime?utm_source=rss_feed</link>
+            <description>Economic Planning Secretary Balisacan said there was no attempt to sideline Chinese investors even as the two nations increasingly engaged in diplomatic stand-offs.</description>
+            <pubDate>Thu, 09 May 2024 15:28:04 +0800</pubDate>
+            <dc:creator>Bloomberg</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/asia/southeast-asia/article/3262006/south-china-sea-philippines-says-not-turning-against-beijing-economy-doing-well-despite-maritime?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2024/02/27/full.mp4" duration="109"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/02/27/clear.jpg?itok=WVG20h6C"/>
+            <author>Bloomberg</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2024/02/27/full.mp4" length="109"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/02/27/clear.jpg?itok=WVG20h6C"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Watch: Russia marks Victory Day, emboldened by Ukraine war gains</title>
+            <link>https://www.scmp.com/news/world/russia-central-asia/article/3262000/watch-russia-marks-victory-day-emboldened-ukraine-war-gains?utm_source=rss_feed</link>
+            <description>The May 9 parade marks the Soviet Union&#x2019;s defeat of Nazi Germany in World War II and has become one of Russia&#x2019;s most important public holidays.</description>
+            <pubDate>Thu, 09 May 2024 14:55:50 +0800</pubDate>
+            <dc:creator>Agencies</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/russia-central-asia/article/3262000/watch-russia-marks-victory-day-emboldened-ukraine-war-gains?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/d2f6fd52-4ede-45a7-907b-7d2bed89ba6e_0a3c3a9b.jpg?itok=43Ihc6-s"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Agencies</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/d2f6fd52-4ede-45a7-907b-7d2bed89ba6e_0a3c3a9b.jpg?itok=43Ihc6-s"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Why China&#x2019;s diversified economy garners both praise and criticism</title>
+            <link>https://www.scmp.com/opinion/china-opinion/article/3261989/why-chinas-diversified-economy-garners-both-praise-and-criticism?utm_source=rss_feed</link>
+            <description>China has achieved economic success not just through repurposing Western technology but by rapidly upgrading and adapting it. Top-down management coexists with local autonomy and bottom-up innovation in the Chinese industrial ecosystem.</description>
+            <pubDate>Thu, 09 May 2024 14:32:11 +0800</pubDate>
+            <dc:creator>Prof Zhang Jun</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/opinion/china-opinion/article/3261989/why-chinas-diversified-economy-garners-both-praise-and-criticism?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/ba8847d3-613c-4b8d-8f69-0320792c0d23_02cd3e64.jpg?itok=BvHAhdF8"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Prof Zhang Jun</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/ba8847d3-613c-4b8d-8f69-0320792c0d23_02cd3e64.jpg?itok=BvHAhdF8"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Hong Kong&#x2019;s Greater Bay Airlines will suspend flights to Singapore next month, announcing cuts 2 weeks after service launched</title>
+            <link>https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3261998/hong-kongs-greater-bay-airlines-will-suspend-flights-singapore-next-month-2-weeks-after-service?utm_source=rss_feed</link>
+            <description>Carrier announces cuts just two weeks after launching service to city state, citing commercial considerations.</description>
+            <pubDate>Thu, 09 May 2024 14:23:38 +0800</pubDate>
+            <dc:creator>Olga Wong,Cannix Yau</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3261998/hong-kongs-greater-bay-airlines-will-suspend-flights-singapore-next-month-2-weeks-after-service?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/5f8d47b3-a591-4942-b59f-adda4282d9d5_22c28402.jpg?itok=J8ZYLFK5"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Olga Wong,Cannix Yau</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/5f8d47b3-a591-4942-b59f-adda4282d9d5_22c28402.jpg?itok=J8ZYLFK5"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>QuantaSing, China&#x2019;s Leading Adult Learning Platform, Extends Global Reach</title>
+            <link>https://www.scmp.com/presented/news/hong-kong/topics/silver-economy/article/3261129/quantasing-chinas-leading-adult-learning-platform-extends-global-reach?utm_source=rss_feed</link>
+            <description>Serving the Silver Economy&#xA0;&#xD; &#xD; According to the Asian Development Bank, the population of older individuals (over 60) in the region is expected to triple between 2010 and 2050, reaching close to 1.3 billion people. While the challenges posed by an aging population are often associated with socioeconomic issues in East Asia, there&#x2019;s a positive trend emerging: the concept of the &#x2018;Silver Economy.&#x2019; This term represents the development of products and services specifically tailored for the elderly.&#xA0;&#xD; &#xD; Even the younger cohort born in the 1960s and 1970s whom will soon be exploring retirement options are driving the growth of this economy through their unique consumption styles and capabilities. Being well-educated and with ample disposable income, they highly value self-fulfillment and achievement. Consequently, this new economic strata has significantly untapped potential and is positioned for even more growth.&#xD; &#xD; &#xD; &#xD; Quantasing is at the forefront of the Silver Economy, pioneering services in interest learning and life-long learning, seeking to meet market demand and improve lives at a time of transition that can be somewhat disruptive for many people. Since establishing in July 2019, the company has gained over 112 million registered users, making it the largest online adult learning platform in China. &#xA0;&#xD; &#xD; Innovative Engagement&#xA0;&#xD; &#xD; QuantaSing provides a wide variety of teaching courses delivered through livestreaming, community engagement, and a combination of online and offline (OMO) methods. By integrating advanced technologies like artificial intelligence (AI) into online learning, the company provides personalized services for the silver generation. QuantaSing&#x2019;s teaching model seamlessly blends education and entertainment, making learning enjoyable. It also creates a sense of belonging and participation through social interactions, enhancing participant&#x2019;s self-worth, happiness, and sense of achievement.&#xD; &#xD; Additionally, focused on consumer demand, QuantaSing continues to explore and develop products and&#x2026;
+            </description>
+            <pubDate>Thu, 09 May 2024 14:23:30 +0800</pubDate>
+            <dc:creator>Advertising partner</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/presented/news/hong-kong/topics/silver-economy/article/3261129/quantasing-chinas-leading-adult-learning-platform-extends-global-reach?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/2024/05/02/hero.jpg?itok=7Zy2o-U2"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Advertising partner</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/2024/05/02/hero.jpg?itok=7Zy2o-U2"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Chinese woman charged with murder of man at Singapore condominium</title>
+            <link>https://www.scmp.com/news/asia/southeast-asia/article/3261988/chinese-woman-charged-murder-man-singapore-condominium?utm_source=rss_feed</link>
+            <description>Li Ye, a Chinese national, is accused of causing the death of Lim Lai Guan at a residential unit along Beach Road in the city state.</description>
+            <pubDate>Thu, 09 May 2024 14:00:24 +0800</pubDate>
+            <dc:creator>TODAY</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/asia/southeast-asia/article/3261988/chinese-woman-charged-murder-man-singapore-condominium?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/5aa0eca9-58bc-4d11-a2e5-5701a76f64cb_9c37559c.jpg?itok=cQ_YY21v"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>TODAY</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/5aa0eca9-58bc-4d11-a2e5-5701a76f64cb_9c37559c.jpg?itok=cQ_YY21v"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Who are Phoenix Legend? China music duo capture affection of nation with cross-generational appeal</title>
+            <link>https://www.scmp.com/news/people-culture/china-personalities/article/3260612/who-are-phoenix-legend-china-music-duo-capture-affection-nation-cross-generational-appeal?utm_source=rss_feed</link>
+            <description>They have been around for more than 20 years, but the Chinese music duo Phoenix Legend are still going strong, attracting fans of all ages.</description>
+            <pubDate>Thu, 09 May 2024 14:00:14 +0800</pubDate>
+            <dc:creator>Alice Yan</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/people-culture/china-personalities/article/3260612/who-are-phoenix-legend-china-music-duo-capture-affection-nation-cross-generational-appeal?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/5093b892-5973-4232-a213-426f5ddc69ee_f62938de.jpg?itok=QynYGM9i"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Alice Yan</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/5093b892-5973-4232-a213-426f5ddc69ee_f62938de.jpg?itok=QynYGM9i"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Hong Kong businessman, son surrender to police over abduction of cryptocurrency investor</title>
+            <link>https://www.scmp.com/news/hong-kong/law-and-crime/article/3261990/hong-kong-businessman-son-turn-themselves-over-abduction-cryptocurrency-investor?utm_source=rss_feed</link>
+            <description>Investigations show seven-seater car used in victim&#x2019;s abduction belongs to suspects&#x2019; family.</description>
+            <pubDate>Thu, 09 May 2024 13:30:26 +0800</pubDate>
+            <dc:creator>Clifford Lo</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/hong-kong/law-and-crime/article/3261990/hong-kong-businessman-son-turn-themselves-over-abduction-cryptocurrency-investor?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/c1eece5e-f87b-4778-86b2-111774a03a2a_77be710f.jpg?itok=o2U4fRjA"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Clifford Lo</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/c1eece5e-f87b-4778-86b2-111774a03a2a_77be710f.jpg?itok=o2U4fRjA"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Germany rattled by violent attacks on politicians ahead of European elections</title>
+            <link>https://www.scmp.com/news/world/europe/article/3261986/germany-rattled-violent-attacks-politicians-ahead-european-elections?utm_source=rss_feed</link>
+            <description>Further attacks on politicians in Germany have rattled the country and prompted renewed outrage from leaders, after Berlin&#x2019;s former mayor was assaulted in a library.</description>
+            <pubDate>Thu, 09 May 2024 13:20:28 +0800</pubDate>
+            <dc:creator>dpa</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/europe/article/3261986/germany-rattled-violent-attacks-politicians-ahead-european-elections?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/96258bfa-169b-4989-aee1-2e67e33724c1_76396bc8.jpg?itok=Bf_ylWgz"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>dpa</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/96258bfa-169b-4989-aee1-2e67e33724c1_76396bc8.jpg?itok=Bf_ylWgz"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Cathay Pacific&#x2019;s HK Express rolls out cheap seats to beat regional rivals. But will low-cost fares to Japan, Taiwan lure budget travellers?</title>
+            <link>https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3261985/cathay-pacifics-hk-express-cheaper-regional-rivals-after-baggage-policy-revamp?utm_source=rss_feed</link>
+            <description>Budget airline has introduced four-tier ticketing system, with entry-level option allowing a single personal item weighing under 7kg.</description>
+            <pubDate>Thu, 09 May 2024 13:18:42 +0800</pubDate>
+            <dc:creator>Wynna Wong</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3261985/cathay-pacifics-hk-express-cheaper-regional-rivals-after-baggage-policy-revamp?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/560f8721-cfcd-47b0-a908-d6d7036f069c_45fa8c7c.jpg?itok=k7V1c8xx"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Wynna Wong</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/560f8721-cfcd-47b0-a908-d6d7036f069c_45fa8c7c.jpg?itok=k7V1c8xx"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Chinese and Finnish team finds way to tune out the noise in quantum transfers</title>
+            <link>https://www.scmp.com/news/china/science/article/3261977/chinese-and-finnish-team-finds-way-tune-out-noise-quantum-transfers?utm_source=rss_feed</link>
+            <description>Experiment opens &#x2018;intriguing pathways&#x2019; for future research, with possible implications for computing or communications.</description>
+            <pubDate>Thu, 09 May 2024 13:01:00 +0800</pubDate>
+            <dc:creator>Dannie Peng</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/china/science/article/3261977/chinese-and-finnish-team-finds-way-tune-out-noise-quantum-transfers?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/678dcf89-4cd0-4855-823c-d0d8ac9de826_1f1ba959.jpg?itok=xWXOkQRd"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Dannie Peng</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/678dcf89-4cd0-4855-823c-d0d8ac9de826_1f1ba959.jpg?itok=xWXOkQRd"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>South Korea&#x2019;s Yoon apologises over wife&#x2019;s Dior handbag, vows to improve livelihoods</title>
+            <link>https://www.scmp.com/news/asia/east-asia/article/3261978/south-koreas-yoon-apologises-over-wifes-dior-handbag-vows-improve-livelihoods?utm_source=rss_feed</link>
+            <description>In his first news conference in about two years, Yoon Suk-yeol pledged to tame inflation and create a new ministry to boost the country&#x2019;s birth rate.</description>
+            <pubDate>Thu, 09 May 2024 12:45:05 +0800</pubDate>
+            <dc:creator>Bloomberg</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/asia/east-asia/article/3261978/south-koreas-yoon-apologises-over-wifes-dior-handbag-vows-improve-livelihoods?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/3f32670b-dd11-498b-ac1e-367f36009e09_4eba7950.jpg?itok=UTf1sN_s"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Bloomberg</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/3f32670b-dd11-498b-ac1e-367f36009e09_4eba7950.jpg?itok=UTf1sN_s"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Hong Kong steps up border, transport measures as Taiwanese band Mayday plays last show after rain, equipment fire forced postponement</title>
+            <link>https://www.scmp.com/news/hong-kong/society/article/3261975/hong-kong-steps-border-transport-measures-taiwanese-band-mayday-plays-last-show-series-after-rain?utm_source=rss_feed</link>
+            <description>Rock group set to hit stage at Central harbourfront at 7.15pm to play final in seven-show tour of city after one concert postponed last week.</description>
+            <pubDate>Thu, 09 May 2024 12:40:36 +0800</pubDate>
+            <dc:creator>Ambrose Li</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/hong-kong/society/article/3261975/hong-kong-steps-border-transport-measures-taiwanese-band-mayday-plays-last-show-series-after-rain?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/b3b6987e-1233-48dd-a10c-0421b4942e32_330fbdb1.jpg?itok=Ns1jODoi"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Ambrose Li</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/b3b6987e-1233-48dd-a10c-0421b4942e32_330fbdb1.jpg?itok=Ns1jODoi"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Mainland China air, sea forces monitor USS Halsey&#x2019;s Taiwan Strait transit</title>
+            <link>https://www.scmp.com/news/china/military/article/3261969/mainland-china-air-sea-forces-monitor-uss-halseys-taiwan-strait-transit?utm_source=rss_feed</link>
+            <description>The &#x2018;routine&#x2019; operation on Wednesday passed without incident but comes as independence-leaning Lai heads to May 20 presidential inauguration.</description>
+            <pubDate>Thu, 09 May 2024 12:05:17 +0800</pubDate>
+            <dc:creator>Seong Hyeon Choi</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/china/military/article/3261969/mainland-china-air-sea-forces-monitor-uss-halseys-taiwan-strait-transit?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2024/02/21/web_0.mp4" duration="105"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/02/21/thumb-clean_1.jpg?itok=tC0ikXBs"/>
+            <author>Seong Hyeon Choi</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2024/02/21/web_0.mp4" length="105"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/02/21/thumb-clean_1.jpg?itok=tC0ikXBs"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Russia builds surveillance bases near northern Japan. Is it &#x2018;punishing&#x2019; Tokyo for supporting Ukraine?</title>
+            <link>https://www.scmp.com/week-asia/politics/article/3261867/russia-builds-surveillance-bases-near-northern-japan-it-punishing-tokyo-supporting-ukraine?utm_source=rss_feed</link>
+            <description>Russia&#x2019;s new development on the Kuril Islands aims to &#x2018;punish&#x2019; Japan for supporting international sanctions and providing aid to Ukraine, analysts say.</description>
+            <pubDate>Thu, 09 May 2024 12:00:18 +0800</pubDate>
+            <dc:creator>Julian Ryall</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/week-asia/politics/article/3261867/russia-builds-surveillance-bases-near-northern-japan-it-punishing-tokyo-supporting-ukraine?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2023/03/22/WEB%20-%20Kishida%20Ukraine_1.mp4"
+                           duration="200"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2023/03/22/clean---Kishida-Ukraine.jpg?itok=GNfBS5u8"/>
+            <author>Julian Ryall</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2023/03/22/WEB%20-%20Kishida%20Ukraine_1.mp4"
+                       length="200" type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2023/03/22/clean---Kishida-Ukraine.jpg?itok=GNfBS5u8"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>South Korean DJ NewJeansNim faces calls for ban in Malaysia after performing in monk robe at dance club</title>
+            <link>https://www.scmp.com/news/asia/southeast-asia/article/3261950/south-korean-dj-newjeansnim-faces-calls-ban-malaysia-after-performing-monk-robe-dance-club?utm_source=rss_feed</link>
+            <description>Lawmaker Wee Ka Siong said NewJeansNim should be blocked form performing again at an entertainment venue in Kuala Lumpur to preserve religious harmony.</description>
+            <pubDate>Thu, 09 May 2024 11:20:17 +0800</pubDate>
+            <dc:creator>The Star</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/asia/southeast-asia/article/3261950/south-korean-dj-newjeansnim-faces-calls-ban-malaysia-after-performing-monk-robe-dance-club?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/4d90ac8b-c904-4373-96d4-141fe8d6298a_1d974579.jpg?itok=Ld170QcY"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>The Star</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/4d90ac8b-c904-4373-96d4-141fe8d6298a_1d974579.jpg?itok=Ld170QcY"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>China trade: &#x2018;resilient&#x2019; April exports beat expectations on tailwinds of global recovery</title>
+            <link>https://www.scmp.com/economy/economic-indicators/article/3261960/china-trade-export-growth-beats-expectations-expands-15-april?utm_source=rss_feed</link>
+            <description>China&#x2019;s exports rose by 1.5 per cent from a year earlier to US$292.5 billion in April, while imports rose by 8.4 per cent year on year last month, data released on Thursday showed.</description>
+            <pubDate>Thu, 09 May 2024 11:13:08 +0800</pubDate>
+            <dc:creator>Mia Nulimaimaiti</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/economy/economic-indicators/article/3261960/china-trade-export-growth-beats-expectations-expands-15-april?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/ed27562d-9361-401b-9cba-267f03618c2c_1f2a985d.jpg?itok=j4MpM7bz"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Mia Nulimaimaiti</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/ed27562d-9361-401b-9cba-267f03618c2c_1f2a985d.jpg?itok=j4MpM7bz"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Nicaragua cancels controversial Chinese canal concession after nearly a decade</title>
+            <link>https://www.scmp.com/news/world/americas/article/3261948/nicaragua-cancels-controversial-chinese-canal-concession-after-nearly-decade?utm_source=rss_feed</link>
+            <description>Nicaragua&#x2019;s congress, controlled by President Daniel Ortega, repealed a law which had given a Chinese investor a concession of up to 100 years to build and operate a canal between the Pacific and Atlantic Oceans</description>
+            <pubDate>Thu, 09 May 2024 10:34:19 +0800</pubDate>
+            <dc:creator>Associated Press</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/americas/article/3261948/nicaragua-cancels-controversial-chinese-canal-concession-after-nearly-decade?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/fce752bf-c5da-4a69-933c-34046ce34382_df362b93.jpg?itok=apcep1GB"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Associated Press</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/fce752bf-c5da-4a69-933c-34046ce34382_df362b93.jpg?itok=apcep1GB"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Scratching your head over July 28 disruption on Hong Kong&#x2019;s busy Kwun Tong MTR line? The Post is here to help you navigate</title>
+            <link>https://www.scmp.com/news/hong-kong/transport/article/3261923/scratching-your-head-over-july-28s-hours-disruption-hong-kongs-busy-kwun-tong-mtr-line-post-here?utm_source=rss_feed</link>
+            <description>July 28 will bring a partial closure and extended travel times on the MTR Corp&#x2019;s Kwun Tong line as essential upgrades take place.</description>
+            <pubDate>Thu, 09 May 2024 10:30:16 +0800</pubDate>
+            <dc:creator>Oscar Liu</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/hong-kong/transport/article/3261923/scratching-your-head-over-july-28s-hours-disruption-hong-kongs-busy-kwun-tong-mtr-line-post-here?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/1aea4bc1-e9d5-46d9-8a27-a9e5b6fa164b_62daaca6.jpg?itok=2oNPv0mI"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Oscar Liu</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/1aea4bc1-e9d5-46d9-8a27-a9e5b6fa164b_62daaca6.jpg?itok=2oNPv0mI"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Is North Korean propaganda playing up Kim Jong-un&#x2019;s &#x2018;human warmth and love&#x2019; to counter Western pop culture?</title>
+            <link>https://www.scmp.com/week-asia/politics/article/3261898/north-korean-propaganda-playing-kim-jong-uns-human-warmth-and-love-counter-western-pop-culture?utm_source=rss_feed</link>
+            <description>Analysts see the move as part of a wider bid by ruler Kim Jong-un to consolidate power and to reduce a cult of personality around his father and grandfather.</description>
+            <pubDate>Thu, 09 May 2024 10:00:15 +0800</pubDate>
+            <dc:creator>Park Chan-kyong</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/week-asia/politics/article/3261898/north-korean-propaganda-playing-kim-jong-uns-human-warmth-and-love-counter-western-pop-culture?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2024/05/07/web%20video.mp4" duration="173"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/05/07/clean-thumb.jpg?itok=Xhad-3Q2"/>
+            <author>Park Chan-kyong</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2024/05/07/web%20video.mp4" length="173"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/05/07/clean-thumb.jpg?itok=Xhad-3Q2"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>China&#x2019;s central bank treasury-bond trade restart &#x2018;now certain&#x2019; as discussions deepen between monetary, fiscal agencies</title>
+            <link>https://www.scmp.com/economy/economic-indicators/article/3261886/chinas-central-bank-treasury-bond-trade-restart-now-certain-discussions-deepen-between-monetary?utm_source=rss_feed</link>
+            <description>State media article on Wednesday says it is &#x2018;certain&#x2019; that China&#x2019;s central bank will participate in treasury bond trading amid better coordination with the finance ministry.</description>
+            <pubDate>Thu, 09 May 2024 10:00:11 +0800</pubDate>
+            <dc:creator>Mia Nulimaimaiti</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/economy/economic-indicators/article/3261886/chinas-central-bank-treasury-bond-trade-restart-now-certain-discussions-deepen-between-monetary?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/24e4d459-6d55-40d1-9bbc-13f15ebfc38a_7a718e72.jpg?itok=htA8g1pB"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Mia Nulimaimaiti</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/24e4d459-6d55-40d1-9bbc-13f15ebfc38a_7a718e72.jpg?itok=htA8g1pB"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>South Koreans snap up gold from convenience stores, vending machines as soaring prices stir frenzy</title>
+            <link>https://www.scmp.com/news/asia/east-asia/article/3261944/south-koreans-snap-gold-convenience-stores-vending-machines-soaring-prices-stir-frenzy?utm_source=rss_feed</link>
+            <description>Younger consumers have flocked to buy bite-sized gold bars from retail stores and vending machines amid frenzy for the precious metal.</description>
+            <pubDate>Thu, 09 May 2024 09:58:47 +0800</pubDate>
+            <dc:creator>Business Insider</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/asia/east-asia/article/3261944/south-koreans-snap-gold-convenience-stores-vending-machines-soaring-prices-stir-frenzy?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2023/10/30/final_0.mp4" duration="91"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2023/10/30/thumb-clean-(1).jpg?itok=u9EWMbkX"/>
+            <author>Business Insider</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2023/10/30/final_0.mp4" length="91"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2023/10/30/thumb-clean-(1).jpg?itok=u9EWMbkX"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Hong Kong authorities urge tutoring centre chain Little Frog Learning Centre to support clients after branches fail to reopen</title>
+            <link>https://www.scmp.com/news/hong-kong/education/article/3261942/hong-kong-authorities-urge-tutoring-centre-chain-little-frog-learning-centre-support-clients-after?utm_source=rss_feed</link>
+            <description>Parents say Little Frog Learning Centre has told them of temporary closure, but they have been unable to get in touch over thousands of dollars in prepaid fees.</description>
+            <pubDate>Thu, 09 May 2024 09:17:43 +0800</pubDate>
+            <dc:creator>Danny Mok,William Yiu</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/hong-kong/education/article/3261942/hong-kong-authorities-urge-tutoring-centre-chain-little-frog-learning-centre-support-clients-after?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/ae97ac74-ae62-49c1-af42-4d2835cbf17f_dd454daa.jpg?itok=wbZ4LFkd"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Danny Mok,William Yiu</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/ae97ac74-ae62-49c1-af42-4d2835cbf17f_dd454daa.jpg?itok=wbZ4LFkd"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Why organisations invest in branded content &#x2013; and how to find the winning formula</title>
+            <link>https://www.scmp.com/presented/news/topics/remarketing/article/3261902/why-organisations-invest-branded-content-and-how-find-winning-formula?utm_source=rss_feed</link>
+            <description>&#xD; Industry leaders and influencers gather to share their insights on the power of branded content at a breakfast event titled &#x201C;Embracing #Ad&#x201D;.&#xD; The event challenged the audience to think about what it means to deploy a successful branded content campaign and how marketers can maximise their returns.&#xD; &#xA0;&#xD;</description>
+            <pubDate>Thu, 09 May 2024 09:10:13 +0800</pubDate>
+            <dc:creator>Jolene Otremba</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/presented/news/topics/remarketing/article/3261902/why-organisations-invest-branded-content-and-how-find-winning-formula?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/2024/05/08/SCMP-Advertorial-MSembracingAD-Hero.jpg?itok=nl7qdcoU"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Jolene Otremba</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/2024/05/08/SCMP-Advertorial-MSembracingAD-Hero.jpg?itok=nl7qdcoU"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Tech war: China&#x2019;s use of RISC-V chip standard faces headwinds amid US scrutiny and Google&#x2019;s end of Android support</title>
+            <link>https://www.scmp.com/tech/tech-war/article/3261889/tech-war-chinas-use-risc-v-chip-standard-faces-headwinds-amid-us-scrutiny-and-googles-end-android?utm_source=rss_feed</link>
+            <description>China&#x2019;s strengthened push to use RISC-V, an open-source chip-design architecture, is facing new risks amid scrutiny by the US and Google&#x2019;s move to stop supporting it on Android.</description>
+            <pubDate>Thu, 09 May 2024 09:00:27 +0800</pubDate>
+            <dc:creator>Kelly Le</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/tech/tech-war/article/3261889/tech-war-chinas-use-risc-v-chip-standard-faces-headwinds-amid-us-scrutiny-and-googles-end-android?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/d178f74f-3e33-4493-ba10-4cb8ad42873d_5a74110a.jpg?itok=XP7KzwLP"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Kelly Le</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/d178f74f-3e33-4493-ba10-4cb8ad42873d_5a74110a.jpg?itok=XP7KzwLP"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Woman condemns China influencer for selling bogus &#x2018;anti-cancer&#x2019; product after mother spends life savings</title>
+            <link>https://www.scmp.com/news/people-culture/trending-china/article/3260292/woman-condemns-china-influencer-selling-bogus-anti-cancer-product-after-mother-spends-life-savings?utm_source=rss_feed</link>
+            <description>A woman in China whose mother was suffering from cancer, discovered the elderly woman had spent all her money on a fake product after an influencer claimed it could cure the illness.</description>
+            <pubDate>Thu, 09 May 2024 09:00:23 +0800</pubDate>
+            <dc:creator>Zoey Zhang</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/people-culture/trending-china/article/3260292/woman-condemns-china-influencer-selling-bogus-anti-cancer-product-after-mother-spends-life-savings?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/04/25/7e151da1-6f2d-407c-b602-fecbd7c72477_0cefc59d.jpg?itok=r28ENRSe"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Zoey Zhang</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/04/25/7e151da1-6f2d-407c-b602-fecbd7c72477_0cefc59d.jpg?itok=r28ENRSe"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>South China Sea: Philippine officials outraged, accuse Beijing of anti-wiretapping law violation over &#x2018;new model&#x2019; phone call</title>
+            <link>https://www.scmp.com/week-asia/politics/article/3261941/south-china-sea-philippine-officials-outraged-accuse-beijing-anti-wiretapping-law-violation-over-new?utm_source=rss_feed</link>
+            <description>Military commanders also suggest recorded material, played to selected media, was fabricated.</description>
+            <pubDate>Thu, 09 May 2024 08:57:39 +0800</pubDate>
+            <dc:creator>Jeoffrey Maitem</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/week-asia/politics/article/3261941/south-china-sea-philippine-officials-outraged-accuse-beijing-anti-wiretapping-law-violation-over-new?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2024/05/07/WEB%20VIDEO.mp4" duration="153"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/05/07/CLEAN-THUMB.jpg?itok=wPZMRufk"/>
+            <author>Jeoffrey Maitem</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2024/05/07/WEB%20VIDEO.mp4" length="153"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/05/07/CLEAN-THUMB.jpg?itok=wPZMRufk"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Hong Kong police railway unit in line for revamp as growing MTR network prompts strategy rethink</title>
+            <link>https://www.scmp.com/news/hong-kong/law-and-crime/article/3261928/hong-kong-police-railway-district-line-revamp-growing-mtr-network-forces-strategy-rethink?utm_source=rss_feed</link>
+            <description>Chief Superintendent Pierre Wong of the force&#x2019;s operations wing says the reshuffle will boost law enforcement efficiency.</description>
+            <pubDate>Thu, 09 May 2024 08:30:16 +0800</pubDate>
+            <dc:creator>Jess Ma</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/hong-kong/law-and-crime/article/3261928/hong-kong-police-railway-district-line-revamp-growing-mtr-network-forces-strategy-rethink?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/569757d0-bee9-4630-93c6-d3af788c015b_0b167201.jpg?itok=cg3bRizx"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Jess Ma</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/569757d0-bee9-4630-93c6-d3af788c015b_0b167201.jpg?itok=cg3bRizx"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>New &#x2018;Squad&#x2019; bloc could allow Philippines to &#x2018;borrow strength&#x2019; of Australia, Japan, US to counter China</title>
+            <link>https://www.scmp.com/week-asia/politics/article/3261905/new-squad-bloc-could-allow-philippines-borrow-strength-australia-japan-us-counter-china?utm_source=rss_feed</link>
+            <description>Emerging alliance expected to undertake more maritime exercises and provide greater security help to the Philippines in its South China Sea claims.</description>
+            <pubDate>Thu, 09 May 2024 08:00:18 +0800</pubDate>
+            <dc:creator>Maria Siow</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/week-asia/politics/article/3261905/new-squad-bloc-could-allow-philippines-borrow-strength-australia-japan-us-counter-china?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2022/11/30/WEB%20-%20India%20US.mp4"
+                           duration="96"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2022/11/30/WEB CLEAN - india us.jpg?itok=LauSJtyQ"/>
+            <author>Maria Siow</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2022/11/30/WEB%20-%20India%20US.mp4" length="96"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2022/11/30/WEB CLEAN - india us.jpg?itok=LauSJtyQ"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Alibaba subsidiary Lingxi Games shuts down game engine project as e-commerce giant sharpens focus on core businesses</title>
+            <link>https://www.scmp.com/tech/big-tech/article/3261916/alibaba-subsidiary-lingxi-games-shuts-down-game-engine-project-e-commerce-giant-sharpens-focus-core?utm_source=rss_feed</link>
+            <description>Lingxi Games has discontinued its Ant Engine project, as parent Alibaba pares down investment in its non-core businesses.</description>
+            <pubDate>Thu, 09 May 2024 07:00:41 +0800</pubDate>
+            <dc:creator>Ann Cao</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/tech/big-tech/article/3261916/alibaba-subsidiary-lingxi-games-shuts-down-game-engine-project-e-commerce-giant-sharpens-focus-core?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/98d70d78-27de-4144-8ea8-4de32853c1d5_b0695bef.jpg?itok=4ssaKzHc"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Ann Cao</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/98d70d78-27de-4144-8ea8-4de32853c1d5_b0695bef.jpg?itok=4ssaKzHc"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Hamas says it will not compromise further with Israel to win Gaza ceasefire</title>
+            <link>https://www.scmp.com/news/world/middle-east/article/3261940/hamas-says-it-will-not-compromise-further-israel-win-gaza-ceasefire?utm_source=rss_feed</link>
+            <description>Talks are still under way in Egypt as negotiators seek a pause in Israel&#x2019;s seven-month-old offensive.</description>
+            <pubDate>Thu, 09 May 2024 06:57:50 +0800</pubDate>
+            <dc:creator>Reuters</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/middle-east/article/3261940/hamas-says-it-will-not-compromise-further-israel-win-gaza-ceasefire?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/fd14b28d-56e6-493e-9017-6d0945de1012_12f7f071.jpg?itok=Vbo-Mdmd"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Reuters</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/fd14b28d-56e6-493e-9017-6d0945de1012_12f7f071.jpg?itok=Vbo-Mdmd"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>New US and China climate envoys, seeking show of progress, meet for first time in Washington</title>
+            <link>https://www.scmp.com/news/china/diplomacy/article/3261939/new-us-and-china-climate-envoys-seeking-show-progress-meet-first-time-washington?utm_source=rss_feed</link>
+            <description>Bilateral working group sessions meant to build on agreements reached last year and restore top-level engagement as pledged at Xi-Biden summit.</description>
+            <pubDate>Thu, 09 May 2024 06:50:16 +0800</pubDate>
+            <dc:creator>Khushboo Razdan</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/china/diplomacy/article/3261939/new-us-and-china-climate-envoys-seeking-show-progress-meet-first-time-washington?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/d6479e10-830f-4eb6-ad61-b519a5fc0a96_971e9950.jpg?itok=pgQe9YXs"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Khushboo Razdan</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/d6479e10-830f-4eb6-ad61-b519a5fc0a96_971e9950.jpg?itok=pgQe9YXs"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>US House quickly defeats Marjorie Taylor Greene&#x2019;s effort to oust Speaker Mike Johnson</title>
+            <link>https://www.scmp.com/news/world/united-states-canada/article/3261938/us-house-quickly-defeats-marjorie-taylor-greenes-effort-oust-speaker-mike-johnson?utm_source=rss_feed</link>
+            <description>Democrats joined Republicans in a 359-43 vote, avoiding a replay of the chaos in October when predecessor Kevin McCarthy was removed from the role.</description>
+            <pubDate>Thu, 09 May 2024 06:11:30 +0800</pubDate>
+            <dc:creator>Reuters</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/united-states-canada/article/3261938/us-house-quickly-defeats-marjorie-taylor-greenes-effort-oust-speaker-mike-johnson?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/d5559514-9fdf-43c0-8bfc-a5c49d259a18_b26a2dd3.jpg?itok=QH1mHQnY"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Reuters</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/d5559514-9fdf-43c0-8bfc-a5c49d259a18_b26a2dd3.jpg?itok=QH1mHQnY"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>How the 1999 Belgrade embassy bombing by US was a &#x2018;wake-up&#x2019; call for China</title>
+            <link>https://www.scmp.com/news/china/military/article/3261878/how-1999-belgrade-embassy-bombing-us-was-wake-call-china?utm_source=rss_feed</link>
+            <description>The 25th anniversary of the &#x2018;humiliating&#x2019; air strike is marked with a promise from Xi Jinping that it will never be forgotten.</description>
+            <pubDate>Thu, 09 May 2024 06:00:32 +0800</pubDate>
+            <dc:creator>Liu Zhen</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/china/military/article/3261878/how-1999-belgrade-embassy-bombing-us-was-wake-call-china?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://storage.scmp.com/d8/cors_uploads/2021/11/12/WEB%20-%20J-20%20stealth%20fighter.mp4"
+                    duration="116"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2021/11/12/clean_-_j-20_stealth_fighter.jpg?itok=uwVUbRZo"/>
+            <author>Liu Zhen</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2021/11/12/WEB%20-%20J-20%20stealth%20fighter.mp4"
+                       length="116" type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2021/11/12/clean_-_j-20_stealth_fighter.jpg?itok=uwVUbRZo"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Charging for waste: Hong Kong needs action, not more procrastination</title>
+            <link>https://www.scmp.com/opinion/asia-opinion/article/3261626/charging-waste-hong-kong-needs-action-not-more-procrastination?utm_source=rss_feed</link>
+            <description>More than a decade and hundreds of trials after the first public consultation on waste charging, the government still has not adequately prepared the public or recycling facilities. But further delay is not an option.</description>
+            <pubDate>Thu, 09 May 2024 05:30:25 +0800</pubDate>
+            <dc:creator>Edwin Lau</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/opinion/asia-opinion/article/3261626/charging-waste-hong-kong-needs-action-not-more-procrastination?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2021/10/22/waste_web.mp4" duration="407"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2021/10/22/waste_web_plain.jpg?itok=SUeCu9nV"/>
+            <author>Edwin Lau</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2021/10/22/waste_web.mp4" length="407"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2021/10/22/waste_web_plain.jpg?itok=SUeCu9nV"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Amid China tech advances, US national security is &#x2018;foremost&#x2019;: top Biden official</title>
+            <link>https://www.scmp.com/news/china/article/3261937/amid-china-tech-advances-us-national-security-foremost-top-biden-official?utm_source=rss_feed</link>
+            <description>American vulnerability to Chinese overcapacity also a concern being tackled, Commerce Secretary Gina Raimondo tells key House Appropriations committee.</description>
+            <pubDate>Thu, 09 May 2024 04:30:23 +0800</pubDate>
+            <dc:creator>Khushboo Razdan</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/china/article/3261937/amid-china-tech-advances-us-national-security-foremost-top-biden-official?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/f3d15706-7176-41d8-b84c-e6f0202c880d_a541aeb5.jpg?itok=JfrMJ0VU"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Khushboo Razdan</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/f3d15706-7176-41d8-b84c-e6f0202c880d_a541aeb5.jpg?itok=JfrMJ0VU"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Chinese leader Xi Jinping&#x2019;s Serbia trip &#x2018;timed to increase tensions&#x2019; with West, US envoy says</title>
+            <link>https://www.scmp.com/news/china/diplomacy/article/3261936/chinese-leader-xi-jinpings-serbia-trip-timed-increase-tensions-west-us-envoy-says?utm_source=rss_feed</link>
+            <description>Xi&#x2019;s arrival and remarks published in Serbia coincided with 25th anniversary of US air strike that killed three Chinese journalists.</description>
+            <pubDate>Thu, 09 May 2024 03:26:25 +0800</pubDate>
+            <dc:creator>Finbarr Bermingham</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/china/diplomacy/article/3261936/chinese-leader-xi-jinpings-serbia-trip-timed-increase-tensions-west-us-envoy-says?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/018a05cc-fea9-4055-a8d7-cee3a9b0b039_e4b04918.jpg?itok=ywivJV5Y"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Finbarr Bermingham</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/018a05cc-fea9-4055-a8d7-cee3a9b0b039_e4b04918.jpg?itok=ywivJV5Y"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>US presidential candidate Robert F. Kennedy Jnr says he thinks worm ate part of his brain</title>
+            <link>https://www.scmp.com/news/world/united-states-canada/article/3261935/us-presidential-candidate-robert-f-kennedy-jnr-says-he-thinks-worm-ate-part-his-brain?utm_source=rss_feed</link>
+            <description>The independent White House hopeful made the claim in a 2012 deposition as part of his divorce from his second wife, but says he has since recovered.</description>
+            <pubDate>Thu, 09 May 2024 02:38:41 +0800</pubDate>
+            <dc:creator>Agence France-Presse</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/united-states-canada/article/3261935/us-presidential-candidate-robert-f-kennedy-jnr-says-he-thinks-worm-ate-part-his-brain?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/c1a27a74-7b8a-44b2-8568-48cf81629060_fe41aafb.jpg?itok=P5aJ-CL0"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Agence France-Presse</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/c1a27a74-7b8a-44b2-8568-48cf81629060_fe41aafb.jpg?itok=P5aJ-CL0"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Joe Biden says US will withhold weapons from Israel if it invades Gaza&#x2019;s Rafah, in warning to ally</title>
+            <link>https://www.scmp.com/news/world/middle-east/article/3261933/gaza-war-us-paused-israel-arms-shipment-over-rafah-concerns-pentagon-chief-lloyd-austin-says?utm_source=rss_feed</link>
+            <description>US President Joe Biden publicly warned Israel for the first time that the US would stop supplying it weapons if Israeli forces make a major invasion of Rafah, a refugee-packed city in southern Gaza.</description>
+            <pubDate>Thu, 09 May 2024 01:49:12 +0800</pubDate>
+            <dc:creator>Reuters</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/middle-east/article/3261933/gaza-war-us-paused-israel-arms-shipment-over-rafah-concerns-pentagon-chief-lloyd-austin-says?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/1d0dab87-76c4-4351-b027-d0ea5dd32c23_e534ab29.jpg?itok=Ido8HOYP"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Reuters</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/09/1d0dab87-76c4-4351-b027-d0ea5dd32c23_e534ab29.jpg?itok=Ido8HOYP"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Donald Trump wins another delay, as Georgia court agrees to hear bid to disqualify Fani Willis</title>
+            <link>https://www.scmp.com/news/world/united-states-canada/article/3261931/donald-trump-wins-another-delay-georgia-court-agrees-hear-bid-disqualify-fani-willis?utm_source=rss_feed</link>
+            <description>The decision comes a day after a Florida judge postponed the classified documents trial indefinitely, as the list of stalled cases against the ex-US president grows.</description>
+            <pubDate>Thu, 09 May 2024 01:27:34 +0800</pubDate>
+            <dc:creator>Reuters</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/united-states-canada/article/3261931/donald-trump-wins-another-delay-georgia-court-agrees-hear-bid-disqualify-fani-willis?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2023/08/15/Sequence%2001_0.mp4"
+                           duration="213"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2023/08/15/clean-thumb_0.jpg?itok=gt35ctzB"/>
+            <author>Reuters</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2023/08/15/Sequence%2001_0.mp4" length="213"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2023/08/15/clean-thumb_0.jpg?itok=gt35ctzB"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Israel-Gaza war: 49 bodies found at &#x2018;third mass grave&#x2019; at al-Shifa hospital, Palestinian officials say</title>
+            <link>https://www.scmp.com/news/world/middle-east/article/3261926/israel-gaza-war-49-bodies-found-third-mass-grave-al-shifa-hospital-palestinian-officials-say?utm_source=rss_feed</link>
+            <description>So far, 520 bodies have been recovered from seven mass graves found at three different hospitals across Gaza in recent weeks, Gaza&#x2019;s Civil Defence agency said.</description>
+            <pubDate>Wed, 08 May 2024 23:37:19 +0800</pubDate>
+            <dc:creator>Agence France-Presse</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/middle-east/article/3261926/israel-gaza-war-49-bodies-found-third-mass-grave-al-shifa-hospital-palestinian-officials-say?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/0efd4c68-ff23-4fb5-9c05-6dfd6e0e687e_38520ec1.jpg?itok=GjgfyIF2"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Agence France-Presse</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/0efd4c68-ff23-4fb5-9c05-6dfd6e0e687e_38520ec1.jpg?itok=GjgfyIF2"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>US-China tech war: Intel expects revenue to fall &#x2018;below midpoint&#x2019; projections after Huawei ban</title>
+            <link>https://www.scmp.com/news/world/united-states-canada/article/3261925/us-china-tech-war-intel-expects-revenue-fall-below-midpoint-projections-after-huawei-ban?utm_source=rss_feed</link>
+            <description>On Tuesday, the US revoked licenses allowing Huawei, a Chinese telecommunications giant blacklisted by the US, to buy semiconductors from Intel and rival Qualcomm Inc.</description>
+            <pubDate>Wed, 08 May 2024 23:21:33 +0800</pubDate>
+            <dc:creator>Bloomberg</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/united-states-canada/article/3261925/us-china-tech-war-intel-expects-revenue-fall-below-midpoint-projections-after-huawei-ban?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/e5da5904-1576-415d-af72-2148dc7a3bec_520f4937.jpg?itok=jrYgdtoD"
+                    type="image/jpeg" medium="image" width="1280" height="720"/>
+            <author>Bloomberg</author>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2024/05/08/e5da5904-1576-415d-af72-2148dc7a3bec_520f4937.jpg?itok=jrYgdtoD"
+                    type="image/jpeg" length="1280"/>
+        </item>
+        <item>
+            <title>Critics, opposition slam India&#x2019;s election body for bias towards Modi&#x2019;s ruling BJP: &#x2018;extremely compromised&#x2019;</title>
+            <link>https://www.scmp.com/week-asia/politics/article/3261924/critics-opposition-slam-indias-election-body-bias-towards-modis-ruling-bjp-extremely-compromised?utm_source=rss_feed</link>
+            <description>India&#x2019;s election commission faces accusations of bias towards the ruling BJP by refusing to reign in the party&#x2019;s divisive campaign rhetoric and for not providing voter turnout data quickly enough.</description>
+            <pubDate>Wed, 08 May 2024 23:12:22 +0800</pubDate>
+            <dc:creator>Kaisar Andrabi</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/week-asia/politics/article/3261924/critics-opposition-slam-indias-election-body-bias-towards-modis-ruling-bjp-extremely-compromised?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2024/04/01/WEB%20VIDEO_0.mp4" duration="145"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/04/01/CLEAN-THUMB_0.jpg?itok=BgaFfaNv"/>
+            <author>Kaisar Andrabi</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2024/04/01/WEB%20VIDEO_0.mp4" length="145"
+                       type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/04/01/CLEAN-THUMB_0.jpg?itok=BgaFfaNv"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Xi Jinping hails &#x2018;new chapter&#x2019; for China&#x2019;s relations with Serbia as Belgrade backs his global vision</title>
+            <link>https://www.scmp.com/news/china/diplomacy/article/3261922/xi-jinping-hails-new-chapter-chinas-relations-serbia-belgrade-backs-his-global-vision?utm_source=rss_feed</link>
+            <description>Chinese leader hails Belgrade&#x2019;s support for his vision of a &#x2018;community with a shared future&#x2019; as the countries pledge to deepen relations.</description>
+            <pubDate>Wed, 08 May 2024 22:36:30 +0800</pubDate>
+            <dc:creator>Alyssa Chen,Orange Wang</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/china/diplomacy/article/3261922/xi-jinping-hails-new-chapter-chinas-relations-serbia-belgrade-backs-his-global-vision?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://storage.scmp.com/d8/cors_uploads/2021/11/25/WEB%20-%20VietnameseWorkersTyreFactory.mp4"
+                    duration="141"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2021/11/25/clean_-_vietnameseworkerstyrefactory.jpg?itok=i7chHKoQ"/>
+            <author>Alyssa Chen,Orange Wang</author>
+            <enclosure
+                    url="https://storage.scmp.com/d8/cors_uploads/2021/11/25/WEB%20-%20VietnameseWorkersTyreFactory.mp4"
+                    length="141" type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2021/11/25/clean_-_vietnameseworkerstyrefactory.jpg?itok=i7chHKoQ"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>Ukraine war: Kyiv lawmakers back bill allowing prisoners to join army amid manpower shortage, fresh Russian advances</title>
+            <link>https://www.scmp.com/news/world/europe/article/3261921/ukraine-war-kyiv-lawmakers-back-bill-allowing-prisoners-join-army-amid-manpower-shortage-fresh?utm_source=rss_feed</link>
+            <description>Long-opposed to the measure and having criticised Moscow&#x2019;s mobilisation of prisoners to fill its ranks, Kyiv has recently U-turned amid fresh Russian advances on the battlefield.</description>
+            <pubDate>Wed, 08 May 2024 22:30:12 +0800</pubDate>
+            <dc:creator>Agence France-Presse</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/news/world/europe/article/3261921/ukraine-war-kyiv-lawmakers-back-bill-allowing-prisoners-join-army-amid-manpower-shortage-fresh?utm_source=rss_feed</guid>
+            <media:content
+                    url="https://storage.scmp.com/d8/cors_uploads/2024/02/23/WEB%20-%20Ukraine%20two%20years%20on.mp4"
+                    duration="583"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/02/23/clean-thumb.jpg?itok=rWvfc3kn"/>
+            <author>Agence France-Presse</author>
+            <enclosure
+                    url="https://storage.scmp.com/d8/cors_uploads/2024/02/23/WEB%20-%20Ukraine%20two%20years%20on.mp4"
+                    length="583" type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/02/23/clean-thumb.jpg?itok=rWvfc3kn"
+                    length="1280" type="image/jpeg"/>
+        </item>
+        <item>
+            <title>China&#x2019;s banks pore over Russia transactions, causing delays and unsettling exporters</title>
+            <link>https://www.scmp.com/economy/china-economy/article/3261911/chinas-banks-pore-over-russia-transactions-causing-delays-and-unsettling-exporters?utm_source=rss_feed</link>
+            <description>With China&#x2019;s ties to Russia under stronger scrutiny from the West, banks are keeping a closer eye on transactions with links to Moscow &#x2013; and China&#x2019;s exporters are concerned their bottom line will suffer.</description>
+            <pubDate>Wed, 08 May 2024 22:00:11 +0800</pubDate>
+            <dc:creator>Frank Chen,He Huifeng</dc:creator>
+            <guid isPermaLink="true">https://www.scmp.com/economy/china-economy/article/3261911/chinas-banks-pore-over-russia-transactions-causing-delays-and-unsettling-exporters?utm_source=rss_feed</guid>
+            <media:content url="https://storage.scmp.com/d8/cors_uploads/2024/03/18/web.mp4" duration="183"/>
+            <media:thumbnail
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/03/18/clean.jpg?itok=OVRQa5h0"/>
+            <author>Frank Chen,He Huifeng</author>
+            <enclosure url="https://storage.scmp.com/d8/cors_uploads/2024/03/18/web.mp4" length="183" type="video/mp4"/>
+            <enclosure
+                    url="https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/video/thumbnail/2024/03/18/clean.jpg?itok=OVRQa5h0"
+                    length="1280" type="image/jpeg"/>
+        </item>
+    </channel>
+</rss>
