@@ -11,6 +11,8 @@ async function bootstrap() {
       queueOptions: {
         durable: false,
       },
+      prefetchCount: 1,
+      noAck: false,
     },
   });
   await app.listen();
