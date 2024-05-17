@@ -29,7 +29,7 @@ export class PublishService {
       channel.ack(originalMessage); // Acknowledge message after processing
     } catch (err) {
       this.logger.error(PublishService.name, `Failed to publish news, feed: ${feed?.link}`, err);
-      channel.nack(originalMessage);
+      channel.nack(originalMessage, false, true);
     }
   }
 }
