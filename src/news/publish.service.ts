@@ -28,7 +28,7 @@ export class PublishService {
       this.logger.log(PublishService.name, `Published news: ${itemsCount}, feed ${inserted.link}`);
       channel.ack(originalMessage); // Acknowledge message after processing
     } catch (err) {
-      this.logger.error(PublishService.name, `Failed to publish news, feed: ${feed.link}`, err);
+      this.logger.error(PublishService.name, `Failed to publish news, feed: ${feed?.link}`, err);
       channel.nack(originalMessage);
     }
   }
