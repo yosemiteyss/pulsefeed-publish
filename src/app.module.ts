@@ -1,22 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AggregateModule } from './aggregate/aggregate.module';
 import { ConfigModule } from '@common/config/config.module';
-import { LoggerMiddleware } from 'nestjs-http-logger';
-import { ScheduleModule } from '@nestjs/schedule';
+import { NewsModule } from './news/news.module';
 import { LoggerModule } from '@common/logger';
-import { DatabaseModule } from '@common/db';
+import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [
-    ConfigModule,
-    DatabaseModule,
-    LoggerModule.forRoot({ appName: 'pf-aggregate' }),
-    ScheduleModule.forRoot(),
-    AggregateModule,
-  ],
+  imports: [ConfigModule, LoggerModule.forRoot({ appName: 'pf-publish' }), NewsModule],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}
