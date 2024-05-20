@@ -25,7 +25,7 @@ export class FeedsRepository {
         .returning('id')
         .execute();
 
-      const insertNewsIds: string[] = insertedNewsResult.raw;
+      const insertNewsIds = insertedNewsResult.raw.map((raw) => raw.id);
       const insertedNews = await manager.find(NewsEntity, {
         where: {
           id: In(insertNewsIds),
