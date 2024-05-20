@@ -12,6 +12,7 @@ async function bootstrap() {
         durable: false,
       },
       noAck: false,
+      prefetchCount: 10,
     },
   });
   await app.listen();
