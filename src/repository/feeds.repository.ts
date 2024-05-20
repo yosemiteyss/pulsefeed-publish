@@ -1,12 +1,12 @@
+import { DataSource, DeepPartial, In } from 'typeorm';
 import { FeedEntity, NewsEntity } from '@common/db';
-import { DataSource, DeepPartial } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class FeedsRepository {
   constructor(private readonly dataSource: DataSource) {}
 
-  async upsert(feed: DeepPartial<FeedEntity>): Promise<FeedEntity> {
+  async upsert(feed: DeepPartial<FeedEntity>): Promise<NewsEntity[]> {
     return await this.dataSource.transaction(async (manager) => {
       await manager
         .createQueryBuilder()
@@ -16,20 +16,23 @@ export class FeedsRepository {
         .orUpdate(['title', 'description'], ['id'], { skipUpdateIfNoValuesChanged: true })
         .execute();
 
-      await manager
+      const insertedNewsResult = await manager
         .createQueryBuilder()
         .insert()
         .into(NewsEntity)
         .values(feed.items)
         .orIgnore() // Ignore conflict records
+        .returning('id')
         .execute();
 
-      const insertedFeed = await manager.findOne(FeedEntity, {
-        relations: { items: true },
-        where: { id: feed.id },
+      const insertNewsIds: string[] = insertedNewsResult.raw;
+      const insertedNews = await manager.find(NewsEntity, {
+        where: {
+          id: In(insertNewsIds),
+        },
       });
 
-      const relations = insertedFeed.items.map((news) => ({
+      const relations = insertedNews.map((news) => ({
         feedId: feed.id,
         newsId: news.id,
       }));
@@ -42,7 +45,7 @@ export class FeedsRepository {
         .orIgnore()
         .execute();
 
-      return insertedFeed;
+      return insertedNews;
     });
   }
 }

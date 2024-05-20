@@ -21,10 +21,11 @@ export class PublishService {
     try {
       feed = JSON.parse(data);
 
-      const inserted = await this.feedsRepository.upsert(feed);
-      const itemsCount = inserted.items?.length ?? 0;
-
-      this.logger.log(PublishService.name, `Published news: ${itemsCount}, feed ${inserted.link}`);
+      const insertedNews = await this.feedsRepository.upsert(feed);
+      this.logger.log(
+        PublishService.name,
+        `Published news: ${insertedNews.length}, feed ${feed.link}`,
+      );
 
       channel.ack(originalMessage);
     } catch (err) {
