@@ -24,21 +24,25 @@ export class FeedsRepository {
         .orIgnore() // Ignore conflict records
         .execute();
 
+      const insertedFeed = await manager.findOne(FeedEntity, {
+        relations: { items: true },
+        where: { id: feed.id },
+      });
+
+      const relations = insertedFeed.items.map((news) => ({
+        feedId: feed.id,
+        newsId: news.id,
+      }));
+
       await manager
         .createQueryBuilder()
         .insert()
         .into('feeds_news')
-        .values(
-          feed.items.map((news) => ({
-            feedId: feed.id,
-            newsId: news.id,
-          })),
-        )
+        .values(relations)
+        .orIgnore()
         .execute();
 
-      return await manager
-        .getRepository(FeedEntity)
-        .findOne({ relations: { items: true }, where: { id: feed.id } });
+      return insertedFeed;
     });
   }
 }
