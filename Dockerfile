@@ -9,6 +9,10 @@ COPY package*.json ./
 # Copy project
 COPY . .
 
+# submodule
+RUN git submodule update --init --recursive
+RUN git submodule update --recursive --remote
+
 # Copy env
 RUN if [ "$NODE_ENV" = "production" ]; then \
     cp ./pulsefeed-common/.env.production .env; \
