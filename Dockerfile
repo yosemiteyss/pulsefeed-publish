@@ -24,4 +24,4 @@ RUN npm ci
 RUN npm run build
 
 # Start prod build
-CMD ["npm", "run", "start:prod"]
+ENTRYPOINT ["npm", "run", "start:prod"]
