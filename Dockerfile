@@ -9,14 +9,6 @@ COPY package*.json ./
 # Copy project
 COPY . .
 
-# Copy env
-RUN if [ "$NODE_ENV" = "production" ]; then \
-    cp ./pulsefeed-common/.env.production .env; \
-    else \
-    cp ./pulsefeed-common/.env.development .env; \
-    fi
-
-
 # Install app dependencies
 RUN npm ci
 
