@@ -17,6 +17,8 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "esModuleInterop": true,
+    "noImplicitOverride": true,
     "paths": {
       "@common/*": [
         "pulsefeed-common/src/*"
