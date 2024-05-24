@@ -16,7 +16,7 @@ export class FeedsRepository {
         .orUpdate(['title', 'description'], ['id'], { skipUpdateIfNoValuesChanged: true })
         .execute();
 
-      const insertedNewsResult = await manager
+      const { raw } = await manager
         .createQueryBuilder()
         .insert()
         .into(NewsEntity)
@@ -25,13 +25,17 @@ export class FeedsRepository {
         .returning('id')
         .execute();
 
-      const insertNewsIds: string[] = insertedNewsResult.raw.map((raw) => raw.id);
+      // No news items inserted.
+      if (!raw || raw.length === 0) {
+        return [];
+      }
+
+      const newsIds: string[] = raw.map((r) => r.id);
       const insertedNews = await manager.find(NewsEntity, {
         where: {
-          id: In(insertNewsIds),
+          id: In(newsIds),
         },
       });
-
       const relations = insertedNews.map((news) => ({
         feedId: feed.id,
         newsId: news.id,
