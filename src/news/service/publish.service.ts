@@ -1,14 +1,13 @@
-import { FeedsRepository } from '../../repository/feeds.repository';
-import { RmqContext } from '@nestjs/microservices';
-import { LoggerService } from '@common/logger';
-import { Injectable } from '@nestjs/common';
-import { FeedEntity } from '@common/db';
-import { DeepPartial } from 'typeorm';
+import { InsertFeedsService } from "./insert-feeds.service";
+import { RmqContext } from "@nestjs/microservices";
+import { LoggerService } from "@common/logger";
+import { Injectable } from "@nestjs/common";
+import { FeedModel } from "@common/db";
 
 @Injectable()
 export class PublishService {
   constructor(
-    private readonly feedsRepository: FeedsRepository,
+    private readonly insertFeedsService: InsertFeedsService,
     private readonly logger: LoggerService,
   ) {}
 
@@ -16,20 +15,26 @@ export class PublishService {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
 
-    let feed: DeepPartial<FeedEntity>;
+    let feedModel: FeedModel;
 
     try {
-      feed = JSON.parse(data);
+      feedModel = JSON.parse(data);
 
-      const insertedNews = await this.feedsRepository.upsert(feed);
+      const insertedNews = await this.insertFeedsService.upsert(feedModel);
+
       this.logger.log(
         PublishService.name,
-        `Published news: ${insertedNews.length}, feed ${feed.link}`,
+        `Published news: ${insertedNews.length}, feed ${feedModel.link}`,
       );
 
       channel.ack(originalMessage);
     } catch (err) {
-      this.logger.error(PublishService.name, `Failed to publish news, feed: ${feed?.link}`, err);
+      this.logger.error(
+        PublishService.name,
+        `Failed to publish news, feed: ${feedModel?.link}`,
+        err,
+      );
+
       channel.nack(originalMessage, false, false);
     }
   }

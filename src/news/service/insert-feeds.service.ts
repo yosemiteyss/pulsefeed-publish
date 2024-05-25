@@ -1,9 +1,9 @@
-import { DataSource, DeepPartial, In } from 'typeorm';
-import { FeedEntity, NewsEntity } from '@common/db';
-import { Injectable } from '@nestjs/common';
+import { DataSource, DeepPartial, In } from "typeorm";
+import { FeedEntity, NewsEntity } from "@common/db";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class FeedsRepository {
+export class InsertFeedsService {
   constructor(private readonly dataSource: DataSource) {}
 
   async upsert(feed: DeepPartial<FeedEntity>): Promise<NewsEntity[]> {
