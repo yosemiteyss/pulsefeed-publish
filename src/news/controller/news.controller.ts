@@ -1,12 +1,13 @@
-import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { PublishService } from '../service/publish.service';
-import { Controller } from '@nestjs/common';
+import { Ctx, MessagePattern, Payload, RmqContext } from "@nestjs/microservices";
+import { PublishService } from "../service/publish.service";
+import { PATTERN_PUBLISH_FEED } from "@common/queue";
+import { Controller } from "@nestjs/common";
 
 @Controller()
 export class NewsController {
   constructor(private readonly publishNewsService: PublishService) {}
 
-  @MessagePattern('publish-feed')
+  @MessagePattern(PATTERN_PUBLISH_FEED)
   async publishFeed(@Payload() data: any, @Ctx() context: RmqContext) {
     await this.publishNewsService.publishFeed(data, context);
   }
