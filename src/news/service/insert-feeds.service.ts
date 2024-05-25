@@ -1,6 +1,6 @@
-import { DataSource, DeepPartial, In } from "typeorm";
-import { FeedEntity, NewsEntity } from "@common/db";
-import { Injectable } from "@nestjs/common";
+import { DataSource, DeepPartial, In } from 'typeorm';
+import { FeedEntity, NewsEntity } from '@common/db';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class InsertFeedsService {

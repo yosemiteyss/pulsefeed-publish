@@ -1,8 +1,8 @@
-import { InsertFeedsService } from "./insert-feeds.service";
-import { RmqContext } from "@nestjs/microservices";
-import { LoggerService } from "@common/logger";
-import { Injectable } from "@nestjs/common";
-import { FeedModel } from "@common/db";
+import { InsertFeedsService } from './insert-feeds.service';
+import { RmqContext } from '@nestjs/microservices';
+import { LoggerService } from '@common/logger';
+import { Injectable } from '@nestjs/common';
+import { FeedModel } from '@common/db';
 
 @Injectable()
 export class PublishService {

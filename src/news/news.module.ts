@@ -1,8 +1,8 @@
-import { InsertFeedsService } from "./service/insert-feeds.service";
-import { NewsController } from "./controller/news.controller";
-import { PublishService } from "./service/publish.service";
-import { DatabaseModule } from "@common/db";
-import { Module } from "@nestjs/common";
+import { InsertFeedsService } from './service/insert-feeds.service';
+import { NewsController } from './controller/news.controller';
+import { PublishService } from './service/publish.service';
+import { DatabaseModule } from '@common/db';
+import { Module } from '@nestjs/common';
 
 @Module({
   imports: [DatabaseModule],

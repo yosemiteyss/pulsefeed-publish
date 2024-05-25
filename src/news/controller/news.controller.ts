@@ -1,7 +1,7 @@
-import { Ctx, MessagePattern, Payload, RmqContext } from "@nestjs/microservices";
-import { PublishService } from "../service/publish.service";
-import { PATTERN_PUBLISH_FEED } from "@common/queue";
-import { Controller } from "@nestjs/common";
+import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import { PublishService } from '../service/publish.service';
+import { PATTERN_PUBLISH_FEED } from '@common/queue';
+import { Controller } from '@nestjs/common';
 
 @Controller()
 export class NewsController {
