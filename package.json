@@ -16,7 +16,8 @@
     "test": "jest --config jest.json",
     "test:watch": "jest --config jest.json --watch",
     "test:cov": "jest --config jest.json --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config jest.json --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config jest.json --runInBand",
+    "submodule:update": "git submodule update --init --recursive"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
