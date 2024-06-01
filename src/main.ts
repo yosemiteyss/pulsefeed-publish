@@ -16,6 +16,9 @@ async function bootstrap() {
       prefetchCount: 10,
     },
   });
+
+  app.enableShutdownHooks();
+
   await app.listen();
 }
 
