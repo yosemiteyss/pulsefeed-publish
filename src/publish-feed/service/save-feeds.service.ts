@@ -13,7 +13,7 @@ export class SaveFeedsService {
         .insert()
         .into(FeedEntity)
         .values(feed)
-        .orUpdate(['title', 'description', 'image'], ['id'], { skipUpdateIfNoValuesChanged: true })
+        .orUpdate(['title', 'description'], ['id'], { skipUpdateIfNoValuesChanged: true })
         .execute();
 
       const { raw } = await manager
