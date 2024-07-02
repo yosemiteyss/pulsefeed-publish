@@ -1,4 +1,4 @@
-import { SaveFeedsService } from './save-feeds.service';
+import { FeedRepository } from '../repository/feed.repository';
 import { RmqContext } from '@nestjs/microservices';
 import { LoggerService } from '@common/logger';
 import { Injectable } from '@nestjs/common';
@@ -7,7 +7,7 @@ import { Feed } from '@common/model';
 @Injectable()
 export class PublishFeedService {
   constructor(
-    private readonly insertFeedsService: SaveFeedsService,
+    private readonly feedRepository: FeedRepository,
     private readonly logger: LoggerService,
   ) {}
 
@@ -20,7 +20,7 @@ export class PublishFeedService {
     try {
       feed = JSON.parse(data);
 
-      const insertedArticles = await this.insertFeedsService.upsert(feed);
+      const insertedArticles = await this.feedRepository.create(feed);
 
       this.logger.log(
         PublishFeedService.name,
