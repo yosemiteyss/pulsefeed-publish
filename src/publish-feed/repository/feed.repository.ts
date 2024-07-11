@@ -8,7 +8,7 @@ export class FeedRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(feed: Feed): Promise<Article[]> {
-    return await this.prismaService.$transaction(async (tx) => {
+    return this.prismaService.$transaction(async (tx) => {
       // Insert feeds.
       const feedInput = this.feedModelToCreateInput(feed);
       await tx.feed.upsert({
