@@ -1,8 +1,8 @@
 import { FeedRepository } from '../repository/feed.repository';
 import { RmqContext } from '@nestjs/microservices';
 import { LoggerService } from '@common/logger';
+import { PublishFeedDto } from '@common/dto';
 import { Injectable } from '@nestjs/common';
-import { Feed } from '@common/model';
 
 @Injectable()
 export class PublishFeedService {
@@ -15,21 +15,20 @@ export class PublishFeedService {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
 
-    let feed: Feed;
-
+    let dto: PublishFeedDto;
     try {
-      feed = JSON.parse(data);
+      dto = JSON.parse(data);
 
-      const insertedArticles = await this.feedRepository.create(feed);
+      const insertedArticles = await this.feedRepository.create(dto.feed);
 
       this.logger.log(
         PublishFeedService.name,
-        `Published articles count: ${insertedArticles.length}, feed ${feed.link}`,
+        `Published articles count: ${insertedArticles.length}, feed ${dto.feed.link}`,
       );
 
       channel.ack(originalMessage);
     } catch (err) {
-      this.logger.error(PublishFeedService.name, `Failed to publish feed: ${feed?.link}`, err);
+      this.logger.error(PublishFeedService.name, `Failed to publish feed: ${dto.feed?.link}`, err);
       channel.nack(originalMessage, false, false);
     }
   }
