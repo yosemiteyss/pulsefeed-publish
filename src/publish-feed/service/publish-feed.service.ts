@@ -19,11 +19,11 @@ export class PublishFeedService {
     const dto: PublishFeedDto = JSON.parse(data);
 
     try {
-      const insertedArticles = await this.feedRepository.create(dto.feed);
+      const articles = await this.feedRepository.create(dto.feed);
 
       this.logger.log(
         PublishFeedService.name,
-        `Published articles count: ${insertedArticles.length}, feed ${dto.feed.link}`,
+        `Published articles count: ${articles.length}, feed ${dto.feed.link}`,
       );
 
       channel.ack(originalMessage);
