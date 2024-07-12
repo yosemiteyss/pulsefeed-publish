@@ -15,10 +15,9 @@ export class PublishFeedService {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
 
-    let dto: PublishFeedDto;
-    try {
-      dto = JSON.parse(data);
+    const dto: PublishFeedDto = JSON.parse(data);
 
+    try {
       const insertedArticles = await this.feedRepository.create(dto.feed);
 
       this.logger.log(

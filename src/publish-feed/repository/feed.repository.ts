@@ -67,10 +67,10 @@ export class FeedRepository {
       id: entity.id,
       title: entity.title,
       link: entity.link,
-      description: entity.description,
-      image: entity.image,
+      description: entity.description ?? undefined,
+      image: entity.image ?? undefined,
       keywords: entity.keywords,
-      publishedAt: entity.publishedAt,
+      publishedAt: entity.publishedAt ?? undefined,
       category: entity.categoryKey as ArticleCategoryEnum,
       sourceId: entity.sourceId,
     };
