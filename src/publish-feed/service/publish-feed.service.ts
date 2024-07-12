@@ -3,6 +3,7 @@ import { RmqContext } from '@nestjs/microservices';
 import { LoggerService } from '@common/logger';
 import { PublishFeedDto } from '@common/dto';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PublishFeedService {
@@ -27,6 +28,18 @@ export class PublishFeedService {
 
       channel.ack(originalMessage);
     } catch (err) {
+      // Requeue when deadlock occurs.
+      if (err instanceof Prisma.PrismaClientUnknownRequestError) {
+        if (err.message.includes('40P01')) {
+          this.logger.warn(
+            PublishFeedService.name,
+            `Deadlock detected: ${dto.feed?.link}, send requeue,\n$err`,
+          );
+          channel.nack(originalMessage, false, true);
+          return;
+        }
+      }
+
       this.logger.error(PublishFeedService.name, `Failed to publish feed: ${dto.feed?.link}`, err);
       channel.nack(originalMessage, false, false);
     }
