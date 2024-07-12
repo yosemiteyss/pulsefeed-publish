@@ -23,7 +23,7 @@ export class PublishFeedService {
 
       this.logger.log(
         PublishFeedService.name,
-        `Published articles count: ${articles.length}, feed ${dto.feed.link}`,
+        `Published articles: ${articles.length}, feed ${dto.feed.link}`,
       );
 
       channel.ack(originalMessage);
