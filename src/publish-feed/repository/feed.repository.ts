@@ -30,6 +30,8 @@ export class FeedRepository {
         skipDuplicates: true,
       });
 
+      // TODO: insert article-language relations.
+
       return insertedArticles.map((article) => this.articleEntityToModel(article));
     });
   }
