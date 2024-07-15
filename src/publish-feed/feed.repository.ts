@@ -24,15 +24,34 @@ export class FeedRepository {
       });
 
       // Insert articles.
-      const articleInputs = feed.items.map((article) => this.articleModelToCreateInput(article));
-      const insertedArticles = await tx.article.createManyAndReturn({
-        data: articleInputs,
+      const articleInput = feed.items.map((article) => this.articleModelToCreateInput(article));
+      const articleResult = await tx.article.createManyAndReturn({
+        data: articleInput,
         skipDuplicates: true,
       });
 
-      // TODO: insert article-language relations.
+      // Get ids of inserted articles.
+      const articleIds = articleResult.map((article) => article.id);
 
-      return insertedArticles.map((article) => this.articleEntityToModel(article));
+      // Insert article-lang relations.
+      const articleLangRelations: { articleId: string; languageKey: string }[] = [];
+      for (const article of feed.items) {
+        if (articleIds.includes(article.id)) {
+          for (const language of article.languages) {
+            articleLangRelations.push({
+              articleId: article.id,
+              languageKey: language,
+            });
+          }
+        }
+      }
+
+      await tx.languagesOnArticles.createMany({
+        data: articleLangRelations,
+        skipDuplicates: true,
+      });
+
+      return articleResult.map((article) => this.articleEntityToModel(article));
     });
   }
 
@@ -75,6 +94,7 @@ export class FeedRepository {
       publishedAt: entity.publishedAt ?? undefined,
       category: entity.categoryKey as ArticleCategoryEnum,
       sourceId: entity.sourceId,
+      languages: [],
     };
   }
 }

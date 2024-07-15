@@ -1,5 +1,5 @@
-import { FeedRepository } from '../repository/feed.repository';
 import { RmqContext } from '@nestjs/microservices';
+import { FeedRepository } from './feed.repository';
 import { LoggerService } from '@common/logger';
 import { PublishFeedDto } from '@common/dto';
 import { Injectable } from '@nestjs/common';

@@ -1,5 +1,5 @@
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { PublishFeedService } from '../service/publish-feed.service';
+import { PublishFeedService } from './publish-feed.service';
 import { PATTERN_PUBLISH_FEED } from '@common/queue';
 import { Controller } from '@nestjs/common';
 
