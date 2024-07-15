@@ -29,11 +29,10 @@ export class FeedRepository {
         data: articleInput,
         skipDuplicates: true,
       });
+      const articleIds = articleResult.map((article) => article.id);
 
       // Insert feed-article relations.
-      const articleIds = articleResult.map((article) => article.id);
       const feedArticleRelations: { feedId: string; articleId: string }[] = [];
-
       for (const articleId of articleIds) {
         feedArticleRelations.push({
           feedId: feedResult.id,
