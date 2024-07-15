@@ -11,7 +11,7 @@ export class FeedRepository {
     return this.prismaService.$transaction(async (tx) => {
       // Insert feeds.
       const feedInput = this.feedModelToCreateInput(feed);
-      await tx.feed.upsert({
+      const feedResult = await tx.feed.upsert({
         where: {
           id: feedInput.id,
         },
@@ -30,8 +30,21 @@ export class FeedRepository {
         skipDuplicates: true,
       });
 
-      // Get ids of inserted articles.
+      // Insert feed-article relations.
       const articleIds = articleResult.map((article) => article.id);
+      const feedArticleRelations: { feedId: string; articleId: string }[] = [];
+
+      for (const articleId of articleIds) {
+        feedArticleRelations.push({
+          feedId: feedResult.id,
+          articleId: articleId,
+        });
+      }
+
+      await tx.articlesOnFeeds.createMany({
+        data: feedArticleRelations,
+        skipDuplicates: true,
+      });
 
       // Insert article-lang relations.
       const articleLangRelations: { articleId: string; languageKey: string }[] = [];
