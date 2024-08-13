@@ -1,0 +1,35 @@
+name: Build and publish
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  production:
+    runs-on: [ self-hosted, linux ]
+    env:
+      TZ: "Asia/Hong_Kong"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          token: ${{ secrets.READ_REPO_PAT }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run test
+        run: npm test
+
+      - name: Publish to registry
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          registry: ${{ vars.NEXUS_REGISTRY }}
+          access: restricted
