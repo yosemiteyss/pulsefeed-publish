@@ -67,6 +67,17 @@ export class FeedRepository {
     });
   }
 
+  async updateArticleKeywords(articleId: string, keywords: string[]) {
+    await this.prismaService.article.update({
+      where: {
+        id: articleId,
+      },
+      data: {
+        keywordsNlp: keywords,
+      },
+    });
+  }
+
   private feedModelToCreateInput(model: Feed): Prisma.FeedCreateInput {
     return {
       id: model.id,
