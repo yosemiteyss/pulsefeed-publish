@@ -1,6 +1,5 @@
 import { PublishFeedModule } from './publish-feed/publish-feed.module';
-import { ConfigModule } from '@common/config/config.module';
-import { LoggerModule } from '@common/logger';
+import { ConfigModule, LoggerModule } from '@pulsefeed/common';
 import { Module } from '@nestjs/common';
 
 @Module({

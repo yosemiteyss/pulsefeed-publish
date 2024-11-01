@@ -25,6 +25,6 @@
     "<rootDir>"
   ],
   "moduleNameMapper": {
-    "^@common/(.*)$": "<rootDir>/pulsefeed-common/src/$1"
+    "^@pulsefeed/common$": "pulsefeed-common/src"
   }
 }

@@ -1,13 +1,19 @@
-## Setup
+## Setup Project
 
 ```bash
-$ npm install
 $ cp .env.local .env
-$ git submodule update --init --recursive
-$ git submodule update --recursive --remote
+
+$ git submodule init
+$ git submodule update
+
+$ npm install
+
+$ npm run prisma:generate
+
+$ npm run build
 ```
 
-## Running the app
+## Run App
 
 ```bash
 # development
@@ -23,12 +29,5 @@ $ npm run start:prod
 ## Test
 
 ```bash
-# unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```

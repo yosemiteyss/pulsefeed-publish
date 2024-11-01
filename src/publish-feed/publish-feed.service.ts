@@ -1,7 +1,6 @@
-import { PublishFeedDto, PublishKeywordsDto } from '@common/dto';
+import { LoggerService, PublishFeedDto, PublishKeywordsDto } from '@pulsefeed/common';
 import { RmqContext } from '@nestjs/microservices';
 import { FeedRepository } from './feed.repository';
-import { LoggerService } from '@common/logger';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 

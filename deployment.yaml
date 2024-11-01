@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: publish
+  labels:
+    app: publish
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: publish
+  template:
+    metadata:
+      labels:
+        app: publish
+    spec:
+      containers:
+        - image: ghcr.io/yosemiteyss/pulsefeed-publish:latest
+          name: pf-publish
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: pulsefeed-config
+                  key: NODE_ENV
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: pulsefeed-config
+                  key: DATABASE_URL
+            - name: LOKI_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: pulsefeed-config
+                  key: LOKI_URL

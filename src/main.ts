@@ -1,5 +1,5 @@
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { PUBLISH_QUEUE_NAME } from '@common/queue';
+import { PUBLISH_QUEUE_NAME } from '@pulsefeed/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 

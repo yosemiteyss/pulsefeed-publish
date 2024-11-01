@@ -1,7 +1,6 @@
-import { Article, ArticleCategoryEnum, Feed } from '@common/model';
+import { Article, ArticleCategoryEnum, Feed, PrismaService } from '@pulsefeed/common';
 import { Article as ArticleEntity, Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@common/db';
 
 @Injectable()
 export class FeedRepository {
