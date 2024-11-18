@@ -11,7 +11,7 @@ RUN apk --no-cache add git \
 
 RUN npm ci
 
-RUN npm run prisma:generate
+RUN npx prisma generate --schema=./pulsefeed-common/prisma/schema.prisma
 
 RUN npm run build
 
@@ -21,9 +21,12 @@ FROM node:20-alpine AS production
 WORKDIR /app
 
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/pulsefeed-common/prisma/schema.prisma ./dist/prisma/schema.prisma
 
 COPY package.json package-lock.json ./
 
-RUN npm install --only=production
+RUN npm ci --only=production
 
-ENTRYPOINT ["npm", "run", "start:prod"]
+RUN npx prisma generate --schema=./dist/prisma/schema.prisma
+
+CMD ["npm", "run", "start:prod"]
