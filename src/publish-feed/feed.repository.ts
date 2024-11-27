@@ -7,63 +7,69 @@ export class FeedRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(feed: Feed): Promise<Article[]> {
-    return this.prismaService.$transaction(async (tx) => {
-      // Insert feeds.
-      const feedInput = this.feedModelToCreateInput(feed);
-      const feedResult = await tx.feed.upsert({
-        where: {
-          id: feedInput.id,
-        },
-        create: feedInput,
-        update: {
-          title: feedInput.title,
-          description: feedInput.description,
-          link: feedInput.link,
-        },
-      });
-
-      // Insert articles.
-      const articleInput = feed.items.map((article) => this.articleModelToCreateInput(article));
-      const articleResult = await tx.article.createManyAndReturn({
-        data: articleInput,
-        skipDuplicates: true,
-      });
-      const articleIds = articleResult.map((article) => article.id);
-
-      // Insert feed-article relations.
-      const feedArticleRelations: { feedId: string; articleId: string }[] = [];
-      for (const articleId of articleIds) {
-        feedArticleRelations.push({
-          feedId: feedResult.id,
-          articleId: articleId,
+    return this.prismaService.$transaction(
+      async (tx) => {
+        // Insert feeds.
+        const feedInput = this.feedModelToCreateInput(feed);
+        const feedResult = await tx.feed.upsert({
+          where: {
+            id: feedInput.id,
+          },
+          create: feedInput,
+          update: {
+            title: feedInput.title,
+            description: feedInput.description,
+            link: feedInput.link,
+          },
         });
-      }
 
-      await tx.articlesOnFeeds.createMany({
-        data: feedArticleRelations,
-        skipDuplicates: true,
-      });
+        // Insert articles.
+        const articleInput = feed.items.map((article) => this.articleModelToCreateInput(article));
+        const articleResult = await tx.article.createManyAndReturn({
+          data: articleInput,
+          skipDuplicates: true,
+        });
+        const articleIds = articleResult.map((article) => article.id);
 
-      // Insert article-lang relations.
-      const articleLangRelations: { articleId: string; languageKey: string }[] = [];
-      for (const article of feed.items) {
-        if (articleIds.includes(article.id)) {
-          for (const language of article.languages) {
-            articleLangRelations.push({
-              articleId: article.id,
-              languageKey: language,
-            });
+        // Insert feed-article relations.
+        const feedArticleRelations: { feedId: string; articleId: string }[] = [];
+        for (const articleId of articleIds) {
+          feedArticleRelations.push({
+            feedId: feedResult.id,
+            articleId: articleId,
+          });
+        }
+
+        await tx.articlesOnFeeds.createMany({
+          data: feedArticleRelations,
+          skipDuplicates: true,
+        });
+
+        // Insert article-lang relations.
+        const articleLangRelations: { articleId: string; languageKey: string }[] = [];
+        for (const article of feed.items) {
+          if (articleIds.includes(article.id)) {
+            for (const language of article.languages) {
+              articleLangRelations.push({
+                articleId: article.id,
+                languageKey: language,
+              });
+            }
           }
         }
-      }
 
-      await tx.languagesOnArticles.createMany({
-        data: articleLangRelations,
-        skipDuplicates: true,
-      });
+        await tx.languagesOnArticles.createMany({
+          data: articleLangRelations,
+          skipDuplicates: true,
+        });
 
-      return articleResult.map((article) => this.articleEntityToModel(article));
-    });
+        return articleResult.map((article) => this.articleEntityToModel(article));
+      },
+      {
+        maxWait: 5000,
+        timeout: 10000,
+      },
+    );
   }
 
   async updateArticleKeywords(articleId: string, keywords: string[]) {
