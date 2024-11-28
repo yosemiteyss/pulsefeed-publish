@@ -22,8 +22,8 @@ export class PublishFeedService {
       const articles = await this.feedRepository.create(request.feed);
 
       this.logger.log(
-        PublishFeedService.name,
         `Published articles: ${articles.length}, feed ${request.feed.link}`,
+        PublishFeedService.name,
       );
 
       channel.ack(originalMessage);
@@ -32,8 +32,8 @@ export class PublishFeedService {
       if (err instanceof Prisma.PrismaClientUnknownRequestError) {
         if (err.message.includes('40P01')) {
           this.logger.warn(
-            PublishFeedService.name,
             `Deadlock detected: ${request.feed?.link}, send requeue,\n$err`,
+            PublishFeedService.name,
           );
           channel.nack(originalMessage, false, true);
           return;
@@ -41,9 +41,9 @@ export class PublishFeedService {
       }
 
       this.logger.error(
-        PublishFeedService.name,
         `Failed to publish feed: ${request.feed?.link}`,
-        err,
+        err.stack,
+        PublishFeedService.name,
       );
       channel.nack(originalMessage, false, false);
     }
@@ -58,7 +58,11 @@ export class PublishFeedService {
     try {
       await this.feedRepository.updateArticleKeywords(request.articleId, request.keywords);
     } catch (err) {
-      this.logger.error(PublishFeedService.name, `Failed to publish keywords: ${request}`, err);
+      this.logger.error(
+        `Failed to publish keywords: ${request}`,
+        err.stack,
+        PublishFeedService.name,
+      );
       channel.nack(originalMessage, false, false);
     }
   }
