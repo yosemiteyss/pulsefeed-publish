@@ -3,6 +3,6 @@ import { ConfigModule, LoggerModule } from '@pulsefeed/common';
 import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [ConfigModule, LoggerModule.forRoot({ appName: 'pf-publish' }), PublishFeedModule],
+  imports: [ConfigModule, LoggerModule, PublishFeedModule],
 })
 export class AppModule {}
