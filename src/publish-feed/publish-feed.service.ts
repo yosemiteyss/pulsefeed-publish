@@ -1,14 +1,15 @@
-import { LoggerService, PublishFeedDto, PublishKeywordsDto } from '@pulsefeed/common';
+import { PublishFeedDto, PublishKeywordsDto } from '@pulsefeed/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RmqContext } from '@nestjs/microservices';
 import { FeedRepository } from './feed.repository';
-import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PublishFeedService {
   constructor(
     private readonly feedRepository: FeedRepository,
-    private readonly logger: LoggerService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
   ) {}
 
   async publishFeed(data: any, context: RmqContext) {

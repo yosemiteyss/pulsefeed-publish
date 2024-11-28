@@ -1,4 +1,5 @@
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { PUBLISH_QUEUE_NAME } from '@pulsefeed/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -16,7 +17,7 @@ async function bootstrap() {
       prefetchCount: 10,
     },
   });
-
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   app.enableShutdownHooks();
 
   await app.listen();
