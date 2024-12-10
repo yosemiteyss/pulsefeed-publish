@@ -1,14 +1,14 @@
 import { PublishFeedDto, PublishKeywordsDto } from '@pulsefeed/common';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { PublishFeedRepository } from './publish-feed.repository';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RmqContext } from '@nestjs/microservices';
-import { FeedRepository } from './feed.repository';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PublishFeedService {
   constructor(
-    private readonly feedRepository: FeedRepository,
+    private readonly feedRepository: PublishFeedRepository,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
   ) {}
 
@@ -19,13 +19,11 @@ export class PublishFeedService {
     const request: PublishFeedDto = JSON.parse(data);
 
     try {
-      const articles = await this.feedRepository.create(request.feed);
-
+      const articles = await this.feedRepository.create(request.feed, request.articles);
       this.logger.log(
-        `Published articles: ${articles.length}, feed ${request.feed.link}`,
+        `Published articles: ${articles.length}, feed: ${request.feed.link}`,
         PublishFeedService.name,
       );
-
       channel.ack(originalMessage);
     } catch (err) {
       // Requeue when deadlock occurs.

@@ -3,10 +3,10 @@ import { Article as ArticleEntity, Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class FeedRepository {
+export class PublishFeedRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(feed: Feed): Promise<Article[]> {
+  async create(feed: Feed, articles: Article[]): Promise<Article[]> {
     return this.prismaService.$transaction(
       async (tx) => {
         // Insert feeds.
@@ -24,7 +24,7 @@ export class FeedRepository {
         });
 
         // Insert articles.
-        const articleInput = feed.items.map((article) => this.articleModelToCreateInput(article));
+        const articleInput = articles.map((article) => this.articleModelToCreateInput(article));
         const articleResult = await tx.article.createManyAndReturn({
           data: articleInput,
           skipDuplicates: true,
@@ -47,7 +47,7 @@ export class FeedRepository {
 
         // Insert article-lang relations.
         const articleLangRelations: { articleId: string; languageKey: string }[] = [];
-        for (const article of feed.items) {
+        for (const article of articles) {
           if (articleIds.includes(article.id)) {
             for (const language of article.languages) {
               articleLangRelations.push({
