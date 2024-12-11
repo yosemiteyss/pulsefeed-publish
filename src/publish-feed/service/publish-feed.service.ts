@@ -1,25 +1,29 @@
 import { PublishFeedDto, PublishKeywordsDto } from '@pulsefeed/common';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { PublishFeedRepository } from './publish-feed.repository';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { PublishFeedRepository } from '../repository';
 import { RmqContext } from '@nestjs/microservices';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PublishFeedService {
   constructor(
-    private readonly feedRepository: PublishFeedRepository,
+    private readonly publishFeedRepository: PublishFeedRepository,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
   ) {}
 
-  async publishFeed(data: any, context: RmqContext) {
+  /**
+   * Handle the publishing of feed.
+   * @param data the feed data received.
+   * @param context rmq context for the message.
+   */
+  async publishFeed(data: string, context: RmqContext) {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
-
     const request: PublishFeedDto = JSON.parse(data);
 
     try {
-      const articles = await this.feedRepository.create(request.feed, request.articles);
+      const articles = await this.publishFeedRepository.publishFeed(request.feed, request.articles);
       this.logger.log(
         `Published articles: ${articles.length}, feed: ${request.feed.link}`,
         PublishFeedService.name,
@@ -29,7 +33,7 @@ export class PublishFeedService {
       // Requeue when deadlock occurs.
       if (err instanceof Prisma.PrismaClientUnknownRequestError) {
         if (err.message.includes('40P01')) {
-          this.logger.warn(
+          this.logger.error(
             `Deadlock detected: ${request.feed?.link}, send requeue,\n$err`,
             PublishFeedService.name,
           );
@@ -47,14 +51,22 @@ export class PublishFeedService {
     }
   }
 
-  async publishKeywords(data: any, context: RmqContext) {
+  /**
+   * Handle the publishing of keywords.
+   * @param data the keywords data received.
+   * @param context rmq context for the message.
+   */
+  async publishKeywords(data: string, context: RmqContext) {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
-
     const request: PublishKeywordsDto = JSON.parse(data);
 
     try {
-      await this.feedRepository.updateArticleKeywords(request.articleId, request.keywords);
+      await this.publishFeedRepository.updateArticleNlpKeywords(
+        request.articleId,
+        request.keywords,
+      );
+      channel.ack(originalMessage);
     } catch (err) {
       this.logger.error(
         `Failed to publish keywords: ${request}`,
