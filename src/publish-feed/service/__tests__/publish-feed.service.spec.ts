@@ -10,13 +10,14 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { PublishFeedRepository } from '../../repository';
 import { Test, TestingModule } from '@nestjs/testing';
 import { RmqContext } from '@nestjs/microservices';
-import { Logger } from '@nestjs/common';
+import { LoggerService } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 describe('PublishFeedService', () => {
   let publishFeedService: PublishFeedService;
   let publishFeedRepository: DeepMockProxy<PublishFeedRepository>;
   let mockedContext: DeepMockProxy<RmqContext>;
+  let mockedLogger: DeepMockProxy<LoggerService>;
 
   const mockedChannel = {
     ack: jest.fn(),
@@ -50,6 +51,7 @@ describe('PublishFeedService', () => {
   beforeEach(async () => {
     publishFeedRepository = mockDeep<PublishFeedRepository>();
     mockedContext = mockDeep<RmqContext>();
+    mockedLogger = mockDeep<LoggerService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -60,7 +62,7 @@ describe('PublishFeedService', () => {
         },
         {
           provide: WINSTON_MODULE_NEST_PROVIDER,
-          useValue: new Logger(),
+          useValue: mockedLogger,
         },
       ],
     }).compile();
