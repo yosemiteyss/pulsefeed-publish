@@ -1,5 +1,5 @@
-import { PublishFeedController } from './publish-feed.controller';
 import { CacheModule, DatabaseModule } from '@pulsefeed/common';
+import { PublishFeedController } from './controller';
 import { PublishFeedRepository } from './repository';
 import { PublishFeedService } from './service';
 import { Module } from '@nestjs/common';

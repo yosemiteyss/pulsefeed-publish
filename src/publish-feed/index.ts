@@ -1,4 +1,4 @@
 export * from './service';
 export * from './repository';
 export * from './publish-feed.module';
-export * from './publish-feed.controller';
+export * from './controller/publish-feed.controller';

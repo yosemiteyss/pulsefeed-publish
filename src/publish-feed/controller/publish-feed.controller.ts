@@ -1,6 +1,6 @@
 import { PATTERN_PUBLISH_FEED, PATTERN_PUBLISH_KEYWORDS } from '@pulsefeed/common';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { PublishFeedService } from './service';
+import { PublishFeedService } from '../service';
 import { Controller } from '@nestjs/common';
 
 @Controller()
