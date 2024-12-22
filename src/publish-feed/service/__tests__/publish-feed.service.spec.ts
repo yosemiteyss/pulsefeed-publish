@@ -1,6 +1,7 @@
 import {
   ArticleCategoryEnum,
   LanguageEnum,
+  PrismaClient,
   PublishFeedDto,
   PublishKeywordsDto,
 } from '@pulsefeed/common';
@@ -11,7 +12,6 @@ import { PublishFeedRepository } from '../../repository';
 import { Test, TestingModule } from '@nestjs/testing';
 import { RmqContext } from '@nestjs/microservices';
 import { LoggerService } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 
 describe('PublishFeedService', () => {
   let publishFeedService: PublishFeedService;
@@ -103,7 +103,7 @@ describe('PublishFeedService', () => {
       mockedContext.getChannelRef.mockReturnValue(mockedChannel);
       mockedContext.getMessage.mockReturnValue(mockedMessage);
       publishFeedRepository.publishFeed.mockImplementation(async () => {
-        throw new Prisma.PrismaClientUnknownRequestError('40P01 deadlock detected', {
+        throw new PrismaClient.Prisma.PrismaClientUnknownRequestError('40P01 deadlock detected', {
           clientVersion: '1',
           batchRequestIdx: 1,
         });

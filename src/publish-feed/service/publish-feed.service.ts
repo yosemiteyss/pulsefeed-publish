@@ -1,9 +1,8 @@
-import { PublishFeedDto, PublishKeywordsDto } from '@pulsefeed/common';
+import { PrismaClient, PublishFeedDto, PublishKeywordsDto } from '@pulsefeed/common';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { PublishFeedRepository } from '../repository';
 import { RmqContext } from '@nestjs/microservices';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PublishFeedService {
@@ -31,7 +30,7 @@ export class PublishFeedService {
       channel.ack(originalMessage);
     } catch (err) {
       // Requeue when deadlock occurs.
-      if (err instanceof Prisma.PrismaClientUnknownRequestError) {
+      if (err instanceof PrismaClient.Prisma.PrismaClientUnknownRequestError) {
         if (err.message.includes('40P01')) {
           this.logger.error(
             `Deadlock detected: ${request.feed?.link}, send requeue,\n$err`,

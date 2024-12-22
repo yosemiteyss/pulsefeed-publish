@@ -5,8 +5,8 @@ import {
   Feed,
   LanguageEnum,
   PrismaService,
+  PrismaClient,
 } from '@pulsefeed/common';
-import { Article as ArticleEntity, Feed as FeedEntity } from '@prisma/client';
 import { PublishFeedRepository } from '../publish-feed.repository';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -16,7 +16,7 @@ describe('PublishFeedRepository', () => {
   let prismaService: DeepMockProxy<PrismaService>;
   let cacheService: DeepMockProxy<CacheService>;
 
-  const mockedFeedEntity: FeedEntity = {
+  const mockedFeedEntity: PrismaClient.Feed = {
     id: 'id',
     title: 'title',
     link: 'link',
@@ -26,7 +26,7 @@ describe('PublishFeedRepository', () => {
     updatedAt: new Date(),
     deletedAt: null,
   };
-  const mockedArticleEntity: ArticleEntity = {
+  const mockedArticleEntity: PrismaClient.Article = {
     id: 'id',
     title: 'title',
     link: 'link',
