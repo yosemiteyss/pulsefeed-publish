@@ -25,9 +25,7 @@ jobs:
           node-version: 20.18.0
 
       - name: Install Dependencies
-        run: |
-          npm ci
-          npm run prisma:generate
+        run: npm ci
 
       - name: Run Test
         run: npm test
