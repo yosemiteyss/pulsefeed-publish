@@ -1,7 +1,7 @@
 {
   "name": "@yosemiteyss/pulsefeed-publish",
-  "version": "0.0.6",
-  "description": "",
+  "version": "0.1.0",
+  "description": "News publish service.",
   "author": "yosemiteyss",
   "license": "UNLICENSED",
   "repository": {
@@ -25,7 +25,7 @@
     "test:watch": "jest --config jest.json --watch",
     "test:cov": "jest --config jest.json --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config jest.json --runInBand",
-    "prisma:generate": "npx prisma generate --schema=./pulsefeed-common/prisma/schema.prisma",
+    "submodule:init": "git submodule init",
     "submodule:update": "git submodule update --remote --recursive"
   },
   "dependencies": {
