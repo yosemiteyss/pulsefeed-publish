@@ -21,12 +21,14 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
+    "pretest": "npm run prisma:generate",
     "test": "jest --config jest.json --runInBand",
     "test:watch": "jest --config jest.json --watch",
     "test:cov": "jest --config jest.json --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config jest.json --runInBand",
     "submodule:init": "git submodule init",
-    "submodule:update": "git submodule update --remote --recursive"
+    "submodule:update": "git submodule update --remote --recursive",
+    "prisma:generate": "npx prisma generate --schema=./pulsefeed-common/prisma/schema.prisma"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",

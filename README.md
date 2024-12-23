@@ -11,8 +11,11 @@
 
 ## Setup
 ```bash
+$ npm run submodule init
+$ npm run submodule update
 $ cp .env.local .env
 $ npm install
+$ npm run prisma:generate
 ```
 
 ## Run
@@ -24,8 +27,3 @@ $ npm run start
 ```bash
 $ npm run test
 ```
-
-## Post-Build
-### Copy generated prisma client to dist folder
-- During post-build stage, we manually copy the generated prisma client to dist folder.
-  This is done by including the generated client directory as assets in `nest-cli.json`.

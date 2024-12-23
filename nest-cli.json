@@ -3,12 +3,6 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "deleteOutDir": true,
-    "assets": [
-      {
-        "include": "../pulsefeed-common/src/db/client/**/*",
-        "outDir": "dist/pulsefeed-common"
-      }
-    ]
+    "deleteOutDir": true
   }
 }

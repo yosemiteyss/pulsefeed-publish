@@ -1,4 +1,5 @@
-import { Article, ArticleCategoryEnum, LanguageEnum, PrismaClient } from '@pulsefeed/common';
+import { Article, ArticleCategoryEnum, LanguageEnum } from '@pulsefeed/common';
+import { Article as ArticleEntity, Prisma } from '@prisma/client';
 
 export class PublishFeedMapper {
   /**
@@ -7,7 +8,7 @@ export class PublishFeedMapper {
    * @returns prisma create input
    * @private
    */
-  articleModelToCreateInput(model: Article): PrismaClient.Prisma.ArticleCreateManyInput {
+  articleModelToCreateInput(model: Article): Prisma.ArticleCreateManyInput {
     return {
       id: model.id,
       title: model.title,
@@ -28,7 +29,7 @@ export class PublishFeedMapper {
    * @returns article model
    * @private
    */
-  articleEntityToModel(entity: PrismaClient.Article, languages: LanguageEnum[]): Article {
+  articleEntityToModel(entity: ArticleEntity, languages: LanguageEnum[]): Article {
     return {
       id: entity.id,
       title: entity.title,
