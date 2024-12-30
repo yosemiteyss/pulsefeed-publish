@@ -1,25 +1,25 @@
 import { Article, Feed, FeedRepository, LanguageEnum } from '@pulsefeed/common';
-import { PublishFeedMapper } from './publish-feed.mapper';
+import { ArticleMapper } from './article.mapper';
 import { Injectable } from '@nestjs/common';
 import * as R from 'ramda';
 
 @Injectable()
-export class PublishFeedRepository extends FeedRepository {
-  private readonly publishFeedMapper = new PublishFeedMapper();
+export class ArticleRepository extends FeedRepository {
+  private readonly articleMapper = new ArticleMapper();
 
   /**
-   * Publish feed and the associated articles to db.
+   * Insert feed and article records to db.
    * @param feed the feed.
    * @param articles the articles of the feed.
    * @returns array of inserted article.
    */
-  async publishFeed(feed: Feed, articles: Article[]): Promise<Article[]> {
+  async create(feed: Feed, articles: Article[]): Promise<Article[]> {
     const insertedFeed = await this.upsert(feed);
     return this.prismaService.$transaction(
       async (tx) => {
         // Insert articles.
         const articleInput = articles.map((article) =>
-          this.publishFeedMapper.articleModelToCreateInput(article),
+          this.articleMapper.articleModelToCreateInput(article),
         );
         const articleResult = await tx.article.createManyAndReturn({
           data: articleInput,
@@ -64,7 +64,7 @@ export class PublishFeedRepository extends FeedRepository {
           const languages = articleLangGrouped[article.id]!.map(
             ({ languageKey }) => languageKey as LanguageEnum,
           );
-          return this.publishFeedMapper.articleEntityToModel(article, languages);
+          return this.articleMapper.articleEntityToModel(article, languages);
         });
       },
       {
@@ -75,17 +75,35 @@ export class PublishFeedRepository extends FeedRepository {
   }
 
   /**
-   * Update nlp keywords of article.
-   * @param articleId the id of the article.
-   * @param keywordsNlp array of nlp keywords
+   * Update article keywords.
+   * @param articleId the article id.
+   * @param keywords the generated keywords.
    */
-  async updateArticleNlpKeywords(articleId: string, keywordsNlp: string[]) {
+  async updateKeywords(articleId: string, keywords: string[]) {
     await this.prismaService.article.update({
       where: {
         id: articleId,
       },
       data: {
-        keywordsNlp: keywordsNlp,
+        keywords: keywords,
+      },
+    });
+  }
+
+  /**
+   * Mark articles as published.
+   * @param articles the article list.
+   */
+  async publish(articles: Article[]) {
+    const articleIds = articles.map((article) => article.id);
+    await this.prismaService.article.updateMany({
+      where: {
+        id: {
+          in: articleIds,
+        },
+      },
+      data: {
+        isPublished: true,
       },
     });
   }

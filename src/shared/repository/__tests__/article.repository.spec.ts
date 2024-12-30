@@ -7,12 +7,12 @@ import {
   PrismaService,
 } from '@pulsefeed/common';
 import { Article as ArticleEntity, Feed as FeedEntity } from '@prisma/client';
-import { PublishFeedRepository } from '../publish-feed.repository';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
+import { ArticleRepository } from '../article.repository';
 import { Test, TestingModule } from '@nestjs/testing';
 
-describe('PublishFeedRepository', () => {
-  let publishFeedRepository: PublishFeedRepository;
+describe('ArticleRepository', () => {
+  let articleRepository: ArticleRepository;
   let prismaService: DeepMockProxy<PrismaService>;
   let cacheService: DeepMockProxy<CacheService>;
 
@@ -34,12 +34,12 @@ describe('PublishFeedRepository', () => {
     sourceId: 'sourceId',
     image: 'image',
     keywords: ['keyword-1', 'keyword-2'],
-    keywordsNlp: ['keyword-1', 'keyword-2'],
     publishedAt: new Date(),
     categoryKey: ArticleCategoryEnum.HEALTH,
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    isPublished: false,
   };
 
   const feed: Feed = {
@@ -68,7 +68,7 @@ describe('PublishFeedRepository', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        PublishFeedRepository,
+        ArticleRepository,
         {
           provide: PrismaService,
           useValue: prismaService,
@@ -80,7 +80,7 @@ describe('PublishFeedRepository', () => {
       ],
     }).compile();
 
-    publishFeedRepository = module.get<PublishFeedRepository>(PublishFeedRepository);
+    articleRepository = module.get<ArticleRepository>(ArticleRepository);
   });
 
   describe('publishFeed', () => {
@@ -94,7 +94,7 @@ describe('PublishFeedRepository', () => {
       );
 
       const articles = [article];
-      const result = await publishFeedRepository.publishFeed(feed, articles);
+      const result = await articleRepository.create(feed, articles);
 
       expect(prismaService.feed.upsert).toHaveBeenCalled();
       expect(prismaService.$transaction).toHaveBeenCalled();
@@ -128,18 +128,36 @@ describe('PublishFeedRepository', () => {
     });
   });
 
-  describe('updateArticleNlpKeywords', () => {
-    it('should call updateArticleNlpKeywords', async () => {
+  describe('updateKeywords', () => {
+    it('should update article keywords', async () => {
       const articleId = '1';
-      const keywordsNlp = ['keyword-1', 'keyword-2'];
+      const keywords = ['keyword-1', 'keyword-2'];
 
-      await publishFeedRepository.updateArticleNlpKeywords(articleId, keywordsNlp);
+      await articleRepository.updateKeywords(articleId, keywords);
       expect(prismaService.article.update).toHaveBeenCalledWith({
         where: {
           id: articleId,
         },
         data: {
-          keywordsNlp: keywordsNlp,
+          keywords: keywords,
+        },
+      });
+    });
+  });
+
+  describe('publish', () => {
+    it('should update articles isPublished flag to true', async () => {
+      const articleIds = [article.id];
+      await articleRepository.publish([article]);
+
+      expect(prismaService.article.updateMany).toHaveBeenCalledWith({
+        where: {
+          id: {
+            in: articleIds,
+          },
+        },
+        data: {
+          isPublished: true,
         },
       });
     });

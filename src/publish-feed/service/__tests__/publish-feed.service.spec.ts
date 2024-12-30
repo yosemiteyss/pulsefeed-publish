@@ -1,23 +1,21 @@
-import {
-  ArticleCategoryEnum,
-  LanguageEnum,
-  PublishFeedDto,
-  PublishKeywordsDto,
-} from '@pulsefeed/common';
+import { ArticleCategoryEnum, LanguageEnum, PublishFeedDto } from '@pulsefeed/common';
+import { GenerateKeywordsService, TrendingKeywordsService } from '../../../trending';
 import { PublishFeedService } from '../publish-feed.service';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { PublishFeedRepository } from '../../repository';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ArticleRepository } from '../../../shared';
 import { RmqContext } from '@nestjs/microservices';
 import { LoggerService } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 describe('PublishFeedService', () => {
   let publishFeedService: PublishFeedService;
-  let publishFeedRepository: DeepMockProxy<PublishFeedRepository>;
-  let mockedContext: DeepMockProxy<RmqContext>;
-  let mockedLogger: DeepMockProxy<LoggerService>;
+  let context: DeepMockProxy<RmqContext>;
+  let logger: DeepMockProxy<LoggerService>;
+  let articleRepository: DeepMockProxy<ArticleRepository>;
+  let generateKeywordsService: DeepMockProxy<GenerateKeywordsService>;
+  let trendingKeywordsService: DeepMockProxy<TrendingKeywordsService>;
 
   const mockedChannel = {
     ack: jest.fn(),
@@ -43,26 +41,32 @@ describe('PublishFeedService', () => {
       },
     ],
   };
-  const mockedPublishKeywords: PublishKeywordsDto = {
-    articleId: '1',
-    keywords: ['keyword-1', 'keyword-2'],
-  };
 
   beforeEach(async () => {
-    publishFeedRepository = mockDeep<PublishFeedRepository>();
-    mockedContext = mockDeep<RmqContext>();
-    mockedLogger = mockDeep<LoggerService>();
+    context = mockDeep<RmqContext>();
+    logger = mockDeep<LoggerService>();
+    articleRepository = mockDeep<ArticleRepository>();
+    generateKeywordsService = mockDeep<GenerateKeywordsService>();
+    trendingKeywordsService = mockDeep<TrendingKeywordsService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PublishFeedService,
         {
-          provide: PublishFeedRepository,
-          useValue: publishFeedRepository,
+          provide: WINSTON_MODULE_NEST_PROVIDER,
+          useValue: logger,
         },
         {
-          provide: WINSTON_MODULE_NEST_PROVIDER,
-          useValue: mockedLogger,
+          provide: ArticleRepository,
+          useValue: articleRepository,
+        },
+        {
+          provide: GenerateKeywordsService,
+          useValue: generateKeywordsService,
+        },
+        {
+          provide: TrendingKeywordsService,
+          useValue: trendingKeywordsService,
         },
       ],
     }).compile();
@@ -72,14 +76,14 @@ describe('PublishFeedService', () => {
 
   describe('publishFeed', () => {
     it('should deserialize message to dto, and ack', async () => {
-      mockedContext.getChannelRef.mockReturnValue(mockedChannel);
-      mockedContext.getMessage.mockReturnValue(mockedMessage);
-      publishFeedRepository.publishFeed.mockResolvedValue(mockedFeed.articles);
+      context.getChannelRef.mockReturnValue(mockedChannel);
+      context.getMessage.mockReturnValue(mockedMessage);
+      articleRepository.create.mockResolvedValue(mockedFeed.articles);
 
       const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, mockedContext);
+      await publishFeedService.publishFeed(json, context);
 
-      expect(publishFeedRepository.publishFeed).toHaveBeenCalledWith(
+      expect(articleRepository.create).toHaveBeenCalledWith(
         mockedFeed.feed,
         mockedFeed.articles,
       );
@@ -87,22 +91,22 @@ describe('PublishFeedService', () => {
     });
 
     it('should nack for unknown error', async () => {
-      mockedContext.getChannelRef.mockReturnValue(mockedChannel);
-      mockedContext.getMessage.mockReturnValue(mockedMessage);
-      publishFeedRepository.publishFeed.mockImplementation(async () => {
+      context.getChannelRef.mockReturnValue(mockedChannel);
+      context.getMessage.mockReturnValue(mockedMessage);
+      articleRepository.create.mockImplementation(async () => {
         throw new Error('unknown error');
       });
 
       const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, mockedContext);
+      await publishFeedService.publishFeed(json, context);
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
     });
 
     it('should requeue message when prisma deadlock detected', async () => {
-      mockedContext.getChannelRef.mockReturnValue(mockedChannel);
-      mockedContext.getMessage.mockReturnValue(mockedMessage);
-      publishFeedRepository.publishFeed.mockImplementation(async () => {
+      context.getChannelRef.mockReturnValue(mockedChannel);
+      context.getMessage.mockReturnValue(mockedMessage);
+      articleRepository.create.mockImplementation(async () => {
         throw new Prisma.PrismaClientUnknownRequestError('40P01 deadlock detected', {
           clientVersion: '1',
           batchRequestIdx: 1,
@@ -110,32 +114,17 @@ describe('PublishFeedService', () => {
       });
 
       const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, mockedContext);
+      await publishFeedService.publishFeed(json, context);
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
     });
   });
 
   describe('publishKeywords', () => {
-    it('should call update nlp keywords, and ack', async () => {
-      mockedContext.getChannelRef.mockReturnValue(mockedChannel);
-      mockedContext.getMessage.mockReturnValue(mockedMessage);
-      publishFeedRepository.updateArticleNlpKeywords.mockResolvedValue();
-
-      const json = JSON.stringify(mockedPublishKeywords);
-      await publishFeedService.publishKeywords(json, mockedContext);
-
-      expect(publishFeedRepository.updateArticleNlpKeywords).toHaveBeenCalledWith(
-        mockedPublishKeywords.articleId,
-        mockedPublishKeywords.keywords,
-      );
-      expect(mockedChannel.ack).toHaveBeenCalledWith(mockedMessage);
-    });
-
     it('should nack when error occurs', async () => {
-      mockedContext.getChannelRef.mockReturnValue(mockedChannel);
-      mockedContext.getMessage.mockReturnValue(mockedMessage);
-      publishFeedRepository.updateArticleNlpKeywords.mockResolvedValue();
+      context.getChannelRef.mockReturnValue(mockedChannel);
+      context.getMessage.mockReturnValue(mockedMessage);
+      articleRepository.updateKeywords.mockResolvedValue();
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
     });

@@ -1,6 +1,6 @@
 {
   "name": "@yosemiteyss/pulsefeed-publish",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "News publish service.",
   "author": "yosemiteyss",
   "license": "UNLICENSED",
@@ -42,6 +42,7 @@
     "class-validator": "^0.14.0",
     "ioredis": "^5.3.2",
     "nest-winston": "^1.9.7",
+    "openai": "^4.77.0",
     "pg": "^8.11.5",
     "ramda": "^0.29.1",
     "reflect-metadata": "^0.1.13",

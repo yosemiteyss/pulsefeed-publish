@@ -14,7 +14,7 @@ async function bootstrap() {
         durable: false,
       },
       noAck: false,
-      prefetchCount: 10,
+      prefetchCount: 3,
     },
   });
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));

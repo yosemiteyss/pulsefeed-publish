@@ -1,7 +1,7 @@
 import { Article, ArticleCategoryEnum, LanguageEnum } from '@pulsefeed/common';
 import { Article as ArticleEntity, Prisma } from '@prisma/client';
 
-export class PublishFeedMapper {
+export class ArticleMapper {
   /**
    * Convert article model to prisma create input.
    * @param model the article model.
@@ -19,6 +19,7 @@ export class PublishFeedMapper {
       publishedAt: model.publishedAt,
       sourceId: model.sourceId,
       categoryKey: model.category,
+      isPublished: false,
     };
   }
 

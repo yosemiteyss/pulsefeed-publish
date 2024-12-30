@@ -1,5 +1,5 @@
-import { PATTERN_PUBLISH_FEED, PATTERN_PUBLISH_KEYWORDS } from '@pulsefeed/common';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import { PATTERN_PUBLISH_FEED } from '@pulsefeed/common';
 import { PublishFeedService } from '../service';
 import { Controller } from '@nestjs/common';
 
@@ -15,15 +15,5 @@ export class PublishFeedController {
   @MessagePattern(PATTERN_PUBLISH_FEED)
   async publishFeed(@Payload() data: string, @Ctx() context: RmqContext) {
     await this.publishFeedService.publishFeed(data, context);
-  }
-
-  /**
-   * Handle the publishing of keywords.
-   * @param data the keywords data received.
-   * @param context rmq context for the message.
-   */
-  @MessagePattern(PATTERN_PUBLISH_KEYWORDS)
-  async publishKeywords(@Payload() data: string, @Ctx() context: RmqContext) {
-    await this.publishFeedService.publishKeywords(data, context);
   }
 }
