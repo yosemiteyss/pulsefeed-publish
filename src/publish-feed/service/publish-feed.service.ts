@@ -1,6 +1,12 @@
+import {
+  Article,
+  ArticleCategoryEnum,
+  PublishFeedDto,
+  RemoteConfigKey,
+  RemoteConfigService,
+} from '@pulsefeed/common';
 import { InvalidJSONFormatException } from '@nestjs/microservices/errors/invalid-json-format.exception';
 import { GenerateKeywordsService, TrendingKeywordsService } from '../../trending';
-import { Article, ArticleCategoryEnum, PublishFeedDto } from '@pulsefeed/common';
 import { Inject, Injectable, LoggerService, OnModuleInit } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RmqContext } from '@nestjs/microservices';
@@ -14,6 +20,7 @@ export class PublishFeedService implements OnModuleInit {
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     private readonly generateKeywordsService: GenerateKeywordsService,
     private readonly trendingKeywordsService: TrendingKeywordsService,
+    private readonly remoteConfigService: RemoteConfigService,
   ) {}
 
   private readonly GENERATE_KEYWORDS_MAX_RETRIES = 2;
@@ -58,9 +65,15 @@ export class PublishFeedService implements OnModuleInit {
     try {
       const insertedArticles = await this.articleRepository.create(request.feed, request.articles);
 
-      // Update article keywords.
+      // Generate article keywords using LLM.
       if (insertedArticles.length > 0) {
-        await this.generateKeywords(insertedArticles);
+        const featureLLMKeywords = await this.remoteConfigService.get<boolean>(
+          RemoteConfigKey.FEATURE_LLM_KEYWORDS,
+          false,
+        );
+        if (featureLLMKeywords) {
+          await this.generateKeywords(insertedArticles);
+        }
       }
 
       // Mark isPublished flag to true.
