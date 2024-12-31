@@ -114,7 +114,7 @@ export class GenerateKeywordsService {
     }
 
     if (!Array.isArray(parsed)) {
-      throw new JsonParseException('Json response is not an array');
+      throw new JsonParseException(`Json response is not an array: ${parsed}`);
     }
 
     if (
