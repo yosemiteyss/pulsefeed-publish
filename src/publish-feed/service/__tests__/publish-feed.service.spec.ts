@@ -2,10 +2,11 @@ import {
   ArticleCategoryEnum,
   LanguageEnum,
   PublishFeedDto,
-  RemoteConfigKey,
   RemoteConfigService,
 } from '@pulsefeed/common';
+import { InvalidJSONFormatException } from '@nestjs/microservices/errors/invalid-json-format.exception';
 import { GenerateKeywordsService, TrendingKeywordsService } from '../../../trending';
+import { PublishFeedTaskService } from '../publish-feed-task.service';
 import { PublishFeedService } from '../publish-feed.service';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -23,13 +24,13 @@ describe('PublishFeedService', () => {
   let generateKeywordsService: DeepMockProxy<GenerateKeywordsService>;
   let trendingKeywordsService: DeepMockProxy<TrendingKeywordsService>;
   let remoteConfigService: DeepMockProxy<RemoteConfigService>;
+  let publishFeedTaskService: DeepMockProxy<PublishFeedTaskService>;
 
   const mockedChannel = {
     ack: jest.fn(),
     nack: jest.fn(),
   };
   const mockedMessage: Record<string, any> = {};
-
   const mockedFeed: PublishFeedDto = {
     feed: {
       id: 'id',
@@ -56,6 +57,7 @@ describe('PublishFeedService', () => {
     generateKeywordsService = mockDeep<GenerateKeywordsService>();
     trendingKeywordsService = mockDeep<TrendingKeywordsService>();
     remoteConfigService = mockDeep<RemoteConfigService>();
+    publishFeedTaskService = mockDeep<PublishFeedTaskService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -80,28 +82,85 @@ describe('PublishFeedService', () => {
           provide: RemoteConfigService,
           useValue: remoteConfigService,
         },
+        {
+          provide: PublishFeedTaskService,
+          useValue: publishFeedTaskService,
+        },
       ],
     }).compile();
 
     publishFeedService = module.get<PublishFeedService>(PublishFeedService);
+
+    context.getChannelRef.mockReturnValue(mockedChannel);
+    context.getMessage.mockReturnValue(mockedMessage);
   });
 
   describe('publishFeed', () => {
-    it('should deserialize message to dto, and ack', async () => {
-      context.getChannelRef.mockReturnValue(mockedChannel);
-      context.getMessage.mockReturnValue(mockedMessage);
-      articleRepository.create.mockResolvedValue(mockedFeed.articles);
+    it('should throw InvalidJSONFormatException when deserialize dto failed', async () => {
+      const json = 'invalid';
+
+      await expect(publishFeedService.publishFeed(json, context)).rejects.toThrow(
+        InvalidJSONFormatException,
+      );
+      expect(mockedChannel.nack).not.toHaveBeenCalled();
+    });
+
+    it('should requeue when create publish feed task failed', async () => {
+      publishFeedTaskService.addTask.mockRejectedValue(new Error('db error'));
 
       const json = JSON.stringify(mockedFeed);
       await publishFeedService.publishFeed(json, context);
 
-      expect(articleRepository.create).toHaveBeenCalledWith(mockedFeed.feed, mockedFeed.articles);
+      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
+    });
+
+    it('should insert articles to db, without publishing keywords', async () => {
+      const publishFeedTaskId = 'id';
+      articleRepository.create.mockResolvedValue(mockedFeed.articles);
+      remoteConfigService.get.mockResolvedValue(false); // no keywords
+      publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
+
+      const json = JSON.stringify(mockedFeed);
+      await publishFeedService.publishFeed(json, context);
+
+      expect(articleRepository.create).toHaveBeenCalled();
+      expect(articleRepository.publish).toHaveBeenCalled();
       expect(mockedChannel.ack).toHaveBeenCalledWith(mockedMessage);
+      expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
+        taskId: publishFeedTaskId,
+        status: 'Succeed',
+      });
+    });
+
+    it('should insert articles to db, and publish keywords', async () => {
+      const publishFeedTaskId = 'id';
+
+      articleRepository.create.mockResolvedValue(mockedFeed.articles);
+      remoteConfigService.get.mockResolvedValue(true); // feature enabled
+      publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
+
+      const json = JSON.stringify(mockedFeed);
+      await publishFeedService.publishFeed(json, context);
+
+      expect(articleRepository.create).toHaveBeenCalled();
+      expect(articleRepository.publish).toHaveBeenCalled();
+      expect(generateKeywordsService.generateArticlesKeywords).toHaveBeenCalled();
+      expect(mockedChannel.ack).toHaveBeenCalledWith(mockedMessage);
+      expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
+        taskId: publishFeedTaskId,
+        status: 'PublishKeywords',
+      });
+      expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
+        taskId: publishFeedTaskId,
+        status: 'Succeed',
+      });
     });
 
     it('should nack for unknown error', async () => {
-      context.getChannelRef.mockReturnValue(mockedChannel);
-      context.getMessage.mockReturnValue(mockedMessage);
+      const publishFeedTaskId = 'id';
+
+      remoteConfigService.get.mockResolvedValue(false); // no keywords
+      publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
       articleRepository.create.mockImplementation(async () => {
         throw new Error('unknown error');
       });
@@ -126,21 +185,6 @@ describe('PublishFeedService', () => {
       await publishFeedService.publishFeed(json, context);
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
-    });
-
-    it('should publish keywords if FEATURE_LLM_KEYWORDS is true', async () => {
-      context.getChannelRef.mockReturnValue(mockedChannel);
-      context.getMessage.mockReturnValue(mockedMessage);
-
-      articleRepository.create.mockResolvedValue(mockedFeed.articles);
-      remoteConfigService.get
-        .calledWith(RemoteConfigKey.FEATURE_LLM_KEYWORDS, false)
-        .mockResolvedValue(true);
-
-      const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, context);
-
-      expect(generateKeywordsService.generateArticlesKeywords).toHaveBeenCalled();
     });
   });
 });

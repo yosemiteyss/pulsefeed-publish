@@ -1,49 +1,44 @@
-import {
-  Article,
-  ArticleCategoryEnum,
-  PublishFeedDto,
-  RemoteConfigKey,
-  RemoteConfigService,
-} from '@pulsefeed/common';
 import { InvalidJSONFormatException } from '@nestjs/microservices/errors/invalid-json-format.exception';
+import { Article, PublishFeedDto, RemoteConfigKey, RemoteConfigService } from '@pulsefeed/common';
 import { GenerateKeywordsService, TrendingKeywordsService } from '../../trending';
-import { Inject, Injectable, LoggerService, OnModuleInit } from '@nestjs/common';
+import { PublishFeedTaskService } from './publish-feed-task.service';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RmqContext } from '@nestjs/microservices';
 import { ArticleRepository } from '../../shared';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class PublishFeedService implements OnModuleInit {
+export class PublishFeedService {
   constructor(
     private readonly articleRepository: ArticleRepository,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     private readonly generateKeywordsService: GenerateKeywordsService,
     private readonly trendingKeywordsService: TrendingKeywordsService,
     private readonly remoteConfigService: RemoteConfigService,
+    private readonly publishFeedTaskService: PublishFeedTaskService,
   ) {}
 
   private readonly GENERATE_KEYWORDS_MAX_RETRIES = 2;
 
-  // TODO: remove this
-  async onModuleInit() {
-    const trendingKeywords = await this.trendingKeywordsService.getTrendingKeywordsForLang('zh-hk');
-    this.logger.log(
-      `Trending: ${trendingKeywords.map((item) => `${item.keyword}:${item.score} `)}`,
-      PublishFeedService.name,
-    );
-
-    for (const category of Object.values(ArticleCategoryEnum)) {
-      const keywords = await this.trendingKeywordsService.getTrendingKeywordsForCategory(
-        'zh-hk',
-        category,
-      );
-      this.logger.log(
-        `[${category}]: ${keywords.map((item) => `${item.keyword}:${item.score} `)}`,
-        PublishFeedService.name,
-      );
-    }
-  }
+  // async onModuleInit() {
+  //   const trendingKeywords = await this.trendingKeywordsService.getTrendingKeywordsForLang('zh-hk');
+  //   this.logger.log(
+  //     `Trending: ${trendingKeywords.map((item) => `${item.keyword}:${item.score} `)}`,
+  //     PublishFeedService.name,
+  //   );
+  //
+  //   for (const category of Object.values(ArticleCategoryEnum)) {
+  //     const keywords = await this.trendingKeywordsService.getTrendingKeywordsForCategory(
+  //       'zh-hk',
+  //       category,
+  //     );
+  //     this.logger.log(
+  //       `[${category}]: ${keywords.map((item) => `${item.keyword}:${item.score} `)}`,
+  //       PublishFeedService.name,
+  //     );
+  //   }
+  // }
 
   /**
    * Handle the publishing of feed.
@@ -55,11 +50,18 @@ export class PublishFeedService implements OnModuleInit {
     const originalMessage = context.getMessage();
     const startTime = Date.now();
 
-    let request: PublishFeedDto;
-    try {
-      request = JSON.parse(data);
-    } catch (error) {
-      throw new InvalidJSONFormatException(error, data);
+    // Deserialize request.
+    const request = this.deserializePublishFeedRequest(data);
+
+    // Add publish feed task.
+    const publishFeedTaskId = await this.createPublishFeedTask(request.feed.id);
+    if (!publishFeedTaskId) {
+      this.logger.log(
+        `Send requeue, because failed to add publish feed task to db, `,
+        PublishFeedService.name,
+      );
+      channel.nack(originalMessage, false, true);
+      return;
     }
 
     try {
@@ -72,7 +74,7 @@ export class PublishFeedService implements OnModuleInit {
           false,
         );
         if (featureLLMKeywords) {
-          await this.generateKeywords(insertedArticles);
+          await this.generateKeywords(publishFeedTaskId, insertedArticles);
         }
       }
 
@@ -89,18 +91,24 @@ export class PublishFeedService implements OnModuleInit {
       );
 
       channel.ack(originalMessage);
+
+      await this.publishFeedTaskService.updateTask({
+        taskId: publishFeedTaskId,
+        status: 'Succeed',
+      });
     } catch (error) {
       // Requeue when deadlock occurs.
-      if (error instanceof Prisma.PrismaClientUnknownRequestError) {
-        if (error.message.includes('40P01')) {
-          this.logger.error(
-            `Deadlock detected: ${request.feed?.link}, send requeue.`,
-            error.stack,
-            PublishFeedService.name,
-          );
-          channel.nack(originalMessage, false, true);
-          return;
-        }
+      if (
+        error instanceof Prisma.PrismaClientUnknownRequestError &&
+        error.message.includes('40P01')
+      ) {
+        this.logger.error(
+          `Deadlock detected: ${request.feed?.link}, send requeue.`,
+          error.stack,
+          PublishFeedService.name,
+        );
+        channel.nack(originalMessage, false, true);
+        return;
       }
 
       this.logger.error(
@@ -111,16 +119,45 @@ export class PublishFeedService implements OnModuleInit {
 
       // Don't requeue.
       channel.nack(originalMessage, false, false);
+
+      await this.publishFeedTaskService.updateTask({
+        taskId: publishFeedTaskId,
+        status: 'Failed',
+      });
     }
   }
 
-  /**
-   * Generate and update articles keywords.
-   * @param articles the inserted articles.
-   * @private
-   */
-  private async generateKeywords(articles: Article[]) {
+  private deserializePublishFeedRequest(data: string): PublishFeedDto {
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      throw new InvalidJSONFormatException(error, data);
+    }
+  }
+
+  private async createPublishFeedTask(feedId: string): Promise<string | undefined> {
+    try {
+      return await this.publishFeedTaskService.addTask({
+        feedId: feedId,
+        status: 'PublishArticles',
+      });
+    } catch (error) {
+      this.logger.error(
+        `Failed to add publish feed task to db`,
+        error.stack,
+        PublishFeedService.name,
+      );
+      return undefined;
+    }
+  }
+
+  private async generateKeywords(publishFeedTaskId: string, articles: Article[]) {
     let retryCount = 0;
+
+    await this.publishFeedTaskService.updateTask({
+      taskId: publishFeedTaskId,
+      status: 'PublishKeywords',
+    });
 
     while (retryCount < this.GENERATE_KEYWORDS_MAX_RETRIES) {
       try {
