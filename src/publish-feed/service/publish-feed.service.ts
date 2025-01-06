@@ -7,6 +7,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RmqContext } from '@nestjs/microservices';
 import { ArticleRepository } from '../../shared';
 import { Prisma } from '@prisma/client';
+import { insert } from 'ramda';
 
 @Injectable()
 export class PublishFeedService {
@@ -103,6 +104,7 @@ export class PublishFeedService {
         taskId: publishFeedTaskId,
         status: 'Succeed',
         finishedAt: new Date(),
+        publishedArticles: insertedArticles.length,
       });
     } catch (error) {
       // Requeue when deadlock occurs.

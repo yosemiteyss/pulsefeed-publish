@@ -130,6 +130,7 @@ describe('PublishFeedService', () => {
         taskId: publishFeedTaskId,
         status: 'Succeed',
         finishedAt: expect.any(Date),
+        publishedArticles: mockedFeed.articles.length,
       });
     });
 
@@ -155,6 +156,7 @@ describe('PublishFeedService', () => {
         taskId: publishFeedTaskId,
         status: 'Succeed',
         finishedAt: expect.any(Date),
+        publishedArticles: mockedFeed.articles.length,
       });
     });
 
