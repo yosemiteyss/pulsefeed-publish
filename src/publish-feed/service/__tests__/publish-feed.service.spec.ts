@@ -1,4 +1,10 @@
-import { ArticleCategoryEnum, LanguageEnum, PublishFeedDto } from '@pulsefeed/common';
+import {
+  ArticleCategoryEnum,
+  LanguageEnum,
+  PublishFeedDto,
+  RemoteConfigKey,
+  RemoteConfigService,
+} from '@pulsefeed/common';
 import { GenerateKeywordsService, TrendingKeywordsService } from '../../../trending';
 import { PublishFeedService } from '../publish-feed.service';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
@@ -16,6 +22,7 @@ describe('PublishFeedService', () => {
   let articleRepository: DeepMockProxy<ArticleRepository>;
   let generateKeywordsService: DeepMockProxy<GenerateKeywordsService>;
   let trendingKeywordsService: DeepMockProxy<TrendingKeywordsService>;
+  let remoteConfigService: DeepMockProxy<RemoteConfigService>;
 
   const mockedChannel = {
     ack: jest.fn(),
@@ -48,6 +55,7 @@ describe('PublishFeedService', () => {
     articleRepository = mockDeep<ArticleRepository>();
     generateKeywordsService = mockDeep<GenerateKeywordsService>();
     trendingKeywordsService = mockDeep<TrendingKeywordsService>();
+    remoteConfigService = mockDeep<RemoteConfigService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -68,6 +76,10 @@ describe('PublishFeedService', () => {
           provide: TrendingKeywordsService,
           useValue: trendingKeywordsService,
         },
+        {
+          provide: RemoteConfigService,
+          useValue: remoteConfigService,
+        },
       ],
     }).compile();
 
@@ -83,10 +95,7 @@ describe('PublishFeedService', () => {
       const json = JSON.stringify(mockedFeed);
       await publishFeedService.publishFeed(json, context);
 
-      expect(articleRepository.create).toHaveBeenCalledWith(
-        mockedFeed.feed,
-        mockedFeed.articles,
-      );
+      expect(articleRepository.create).toHaveBeenCalledWith(mockedFeed.feed, mockedFeed.articles);
       expect(mockedChannel.ack).toHaveBeenCalledWith(mockedMessage);
     });
 
@@ -118,15 +127,20 @@ describe('PublishFeedService', () => {
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
     });
-  });
 
-  describe('publishKeywords', () => {
-    it('should nack when error occurs', async () => {
+    it('should publish keywords if FEATURE_LLM_KEYWORDS is true', async () => {
       context.getChannelRef.mockReturnValue(mockedChannel);
       context.getMessage.mockReturnValue(mockedMessage);
-      articleRepository.updateKeywords.mockResolvedValue();
 
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+      articleRepository.create.mockResolvedValue(mockedFeed.articles);
+      remoteConfigService.get
+        .calledWith(RemoteConfigKey.FEATURE_LLM_KEYWORDS, false)
+        .mockResolvedValue(true);
+
+      const json = JSON.stringify(mockedFeed);
+      await publishFeedService.publishFeed(json, context);
+
+      expect(generateKeywordsService.generateArticlesKeywords).toHaveBeenCalled();
     });
   });
 });
