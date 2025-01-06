@@ -6,9 +6,6 @@
 ### PATTERN_PUBLISH_FEED
 - Consume scraped news articles, and insert to db.
 
-### PATTERN_PUBLISH_KEYWORDS
-- Consume generated keywords of an article, and insert to db.
-
 ## Setup
 ```bash
 $ npm run submodule init
