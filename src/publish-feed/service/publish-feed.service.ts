@@ -102,6 +102,7 @@ export class PublishFeedService {
       await this.publishFeedTaskService.updateTask({
         taskId: publishFeedTaskId,
         status: 'Succeed',
+        finishedAt: new Date(),
       });
     } catch (error) {
       // Requeue when deadlock occurs.
@@ -130,6 +131,7 @@ export class PublishFeedService {
       await this.publishFeedTaskService.updateTask({
         taskId: publishFeedTaskId,
         status: 'Failed',
+        finishedAt: new Date(),
       });
     }
   }

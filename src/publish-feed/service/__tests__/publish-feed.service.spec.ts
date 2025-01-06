@@ -129,6 +129,7 @@ describe('PublishFeedService', () => {
       expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
         taskId: publishFeedTaskId,
         status: 'Succeed',
+        finishedAt: expect.any(Date),
       });
     });
 
@@ -153,10 +154,11 @@ describe('PublishFeedService', () => {
       expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
         taskId: publishFeedTaskId,
         status: 'Succeed',
+        finishedAt: expect.any(Date),
       });
     });
 
-    it('should nack for unknown error', async () => {
+    it('should nack and not requeue for unknown error', async () => {
       const publishFeedTaskId = 'id';
 
       remoteConfigService.get.mockResolvedValue(false); // no keywords
@@ -169,6 +171,11 @@ describe('PublishFeedService', () => {
       await publishFeedService.publishFeed(json, context);
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+      expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
+        taskId: publishFeedTaskId,
+        status: 'Failed',
+        finishedAt: expect.any(Date),
+      });
     });
 
     it('should requeue message when prisma deadlock detected', async () => {
