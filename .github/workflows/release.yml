@@ -1,9 +1,9 @@
 name: Build and Publish Image
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - published
 
 jobs:
   release:
@@ -33,6 +33,11 @@ jobs:
 
       - name: Run Build
         run: npm run build
+
+      - name: Update Package Version
+        uses: yosemiteyss/version-updater@v2.0.1
+        with:
+          target-file: 'package.json'
 
       - name: Setup Version Name
         run: |
