@@ -28,6 +28,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config jest.json --runInBand",
     "submodule:init": "git submodule init",
     "submodule:update": "git submodule update --remote --recursive",
+    "submodule:pull": "cd ./pulsefeed-common && git pull && cd .. && npm install && npm run prisma:generate",
     "prisma:generate": "npx prisma generate --schema=./pulsefeed-common/prisma/schema.prisma"
   },
   "dependencies": {
