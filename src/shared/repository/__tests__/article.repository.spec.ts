@@ -25,6 +25,7 @@ describe('ArticleRepository', () => {
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    enabled: true,
   };
   const mockedArticleEntity: ArticleEntity = {
     id: 'id',
