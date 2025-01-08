@@ -1,5 +1,12 @@
+import {
+  Article,
+  Feed,
+  FeedRepository,
+  PublishFeedDto,
+  RemoteConfigKey,
+  RemoteConfigService,
+} from '@pulsefeed/common';
 import { InvalidJSONFormatException } from '@nestjs/microservices/errors/invalid-json-format.exception';
-import { Article, PublishFeedDto, RemoteConfigKey, RemoteConfigService } from '@pulsefeed/common';
 import { GenerateKeywordsService, TrendingKeywordsService } from '../../trending';
 import { PublishFeedTaskService } from './publish-feed-task.service';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
@@ -7,11 +14,11 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RmqContext } from '@nestjs/microservices';
 import { ArticleRepository } from '../../shared';
 import { Prisma } from '@prisma/client';
-import { insert } from 'ramda';
 
 @Injectable()
 export class PublishFeedService {
   constructor(
+    private readonly feedRepository: FeedRepository,
     private readonly articleRepository: ArticleRepository,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     private readonly generateKeywordsService: GenerateKeywordsService,
@@ -20,6 +27,10 @@ export class PublishFeedService {
     private readonly publishFeedTaskService: PublishFeedTaskService,
   ) {}
 
+  /**
+   * Maximum number of retry attempts for generating keywords.
+   * @private
+   */
   private readonly GENERATE_KEYWORDS_MAX_RETRIES = 2;
 
   // async onModuleInit() {
@@ -61,8 +72,18 @@ export class PublishFeedService {
       );
     }
 
+    // Insert feed to db.
+    let insertedFeed: Feed;
+    try {
+      insertedFeed = await this.feedRepository.upsert(request.feed);
+    } catch (error) {
+      this.logger.error(`Failed to upsert feed to db`, error.stack, PublishFeedService.name);
+      channel.nack(originalMessage, false, false);
+      return;
+    }
+
     // Add publish feed task.
-    const publishFeedTaskId = await this.createPublishFeedTask(request.feed.id);
+    const publishFeedTaskId = await this.createPublishFeedTask(insertedFeed.id);
     if (!publishFeedTaskId) {
       this.logger.log(
         `Send requeue, because failed to add publish feed task to db, `,
@@ -72,8 +93,9 @@ export class PublishFeedService {
       return;
     }
 
+    // Insert articles to db.
     try {
-      const insertedArticles = await this.articleRepository.create(request.feed, request.articles);
+      const insertedArticles = await this.articleRepository.create(insertedFeed, request.articles);
 
       // Generate article keywords using LLM.
       if (insertedArticles.length > 0) {
@@ -94,7 +116,7 @@ export class PublishFeedService {
       const elapsedTime = endTime - startTime;
 
       this.logger.log(
-        `Published articles: ${insertedArticles.length}, feed: ${request.feed.link}, time taken: ${elapsedTime} ms`,
+        `Published articles: ${insertedArticles.length}, feed: ${insertedFeed.link}, time taken: ${elapsedTime} ms`,
         PublishFeedService.name,
       );
 

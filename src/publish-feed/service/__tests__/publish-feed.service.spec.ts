@@ -1,5 +1,6 @@
 import {
   ArticleCategoryEnum,
+  FeedRepository,
   LanguageEnum,
   PublishFeedDto,
   RemoteConfigService,
@@ -20,6 +21,7 @@ describe('PublishFeedService', () => {
   let publishFeedService: PublishFeedService;
   let context: DeepMockProxy<RmqContext>;
   let logger: DeepMockProxy<LoggerService>;
+  let feedRepository: DeepMockProxy<FeedRepository>;
   let articleRepository: DeepMockProxy<ArticleRepository>;
   let generateKeywordsService: DeepMockProxy<GenerateKeywordsService>;
   let trendingKeywordsService: DeepMockProxy<TrendingKeywordsService>;
@@ -53,6 +55,7 @@ describe('PublishFeedService', () => {
   beforeEach(async () => {
     context = mockDeep<RmqContext>();
     logger = mockDeep<LoggerService>();
+    feedRepository = mockDeep<FeedRepository>();
     articleRepository = mockDeep<ArticleRepository>();
     generateKeywordsService = mockDeep<GenerateKeywordsService>();
     trendingKeywordsService = mockDeep<TrendingKeywordsService>();
@@ -65,6 +68,10 @@ describe('PublishFeedService', () => {
         {
           provide: WINSTON_MODULE_NEST_PROVIDER,
           useValue: logger,
+        },
+        {
+          provide: FeedRepository,
+          useValue: feedRepository,
         },
         {
           provide: ArticleRepository,
@@ -106,6 +113,7 @@ describe('PublishFeedService', () => {
     });
 
     it('should requeue when create publish feed task failed', async () => {
+      feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       publishFeedTaskService.addTask.mockRejectedValue(new Error('db error'));
 
       const json = JSON.stringify(mockedFeed);
@@ -114,8 +122,18 @@ describe('PublishFeedService', () => {
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
     });
 
+    it('should not requeue when upsert feed to db failed', async () => {
+      feedRepository.upsert.mockRejectedValue(new Error('db error'));
+
+      const json = JSON.stringify(mockedFeed);
+      await publishFeedService.publishFeed(json, context);
+
+      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+    });
+
     it('should insert articles to db, without publishing keywords', async () => {
       const publishFeedTaskId = 'id';
+      feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       articleRepository.create.mockResolvedValue(mockedFeed.articles);
       remoteConfigService.get.mockResolvedValue(false); // no keywords
       publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
@@ -136,7 +154,7 @@ describe('PublishFeedService', () => {
 
     it('should insert articles to db, and publish keywords', async () => {
       const publishFeedTaskId = 'id';
-
+      feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       articleRepository.create.mockResolvedValue(mockedFeed.articles);
       remoteConfigService.get.mockResolvedValue(true); // feature enabled
       publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
@@ -162,7 +180,7 @@ describe('PublishFeedService', () => {
 
     it('should nack and not requeue for unknown error', async () => {
       const publishFeedTaskId = 'id';
-
+      feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       remoteConfigService.get.mockResolvedValue(false); // no keywords
       publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
       articleRepository.create.mockImplementation(async () => {
@@ -181,6 +199,7 @@ describe('PublishFeedService', () => {
     });
 
     it('should requeue message when prisma deadlock detected', async () => {
+      feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       context.getChannelRef.mockReturnValue(mockedChannel);
       context.getMessage.mockReturnValue(mockedMessage);
       articleRepository.create.mockImplementation(async () => {

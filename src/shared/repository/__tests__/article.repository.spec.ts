@@ -88,7 +88,6 @@ describe('ArticleRepository', () => {
       prismaService.article.createManyAndReturn.mockResolvedValue([mockedArticleEntity]);
       prismaService.articlesOnFeeds.createMany.mockResolvedValue({ count: 1 });
       prismaService.languagesOnArticles.createMany.mockResolvedValue({ count: 1 });
-      prismaService.feed.upsert.mockResolvedValue(mockedFeedEntity);
       prismaService.$transaction.mockImplementation(async (callback: any) =>
         callback(prismaService),
       );
@@ -96,7 +95,6 @@ describe('ArticleRepository', () => {
       const articles = [article];
       const result = await articleRepository.create(feed, articles);
 
-      expect(prismaService.feed.upsert).toHaveBeenCalled();
       expect(prismaService.$transaction).toHaveBeenCalled();
       expect(prismaService.article.createManyAndReturn).toHaveBeenCalledWith({
         data: expect.arrayContaining([expect.objectContaining({ id: articles[0].id })]),

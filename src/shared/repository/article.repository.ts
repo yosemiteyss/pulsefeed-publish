@@ -1,10 +1,12 @@
-import { Article, Feed, FeedRepository, LanguageEnum } from '@pulsefeed/common';
+import { Article, Feed, LanguageEnum, PrismaService } from '@pulsefeed/common';
 import { ArticleMapper } from './article.mapper';
 import { Injectable } from '@nestjs/common';
 import * as R from 'ramda';
 
 @Injectable()
-export class ArticleRepository extends FeedRepository {
+export class ArticleRepository {
+  constructor(private readonly prismaService: PrismaService) {}
+
   private readonly articleMapper = new ArticleMapper();
 
   /**
@@ -14,7 +16,6 @@ export class ArticleRepository extends FeedRepository {
    * @returns array of inserted article.
    */
   async create(feed: Feed, articles: Article[]): Promise<Article[]> {
-    const insertedFeed = await this.upsert(feed);
     return this.prismaService.$transaction(
       async (tx) => {
         // Insert articles.
@@ -31,7 +32,7 @@ export class ArticleRepository extends FeedRepository {
         const feedArticleRelations: { feedId: string; articleId: string }[] = [];
         for (const articleId of articleIds) {
           feedArticleRelations.push({
-            feedId: insertedFeed.id,
+            feedId: feed.id,
             articleId: articleId,
           });
         }
