@@ -1,9 +1,10 @@
 // noinspection DuplicatedCode
 
-import { CacheKeyBuilder, CacheService, KeyValue } from '@pulsefeed/common';
+import { CacheItem, CacheKeyBuilder, CacheService } from '@pulsefeed/common';
 import { TrendingKeywordsService } from '../trending-keywords.service';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { Test, TestingModule } from '@nestjs/testing';
+import { TrendingKeyword } from '../../model';
 import { PublishCacheKey } from 'src/shared';
 
 describe('TrendingKeywordsService', () => {
@@ -28,7 +29,7 @@ describe('TrendingKeywordsService', () => {
 
   describe('getTrendingKeywordsForLang', () => {
     it('should return trending keywords for the given language', async () => {
-      const mockKeywords: KeyValue[] = [
+      const mockKeywords: CacheItem<TrendingKeyword>[] = [
         { key: 'key1', value: { keyword: 'keyword1', score: 3, lastUpdated: new Date() } },
         { key: 'key2', value: { keyword: 'keyword2', score: 1, lastUpdated: new Date() } },
       ];
@@ -48,7 +49,7 @@ describe('TrendingKeywordsService', () => {
   describe('incrementKeyword', () => {
     it('should increment keyword score and not evict any keyword if the limit is not exceeded', async () => {
       const mockKeyword = { keyword: 'test', score: 5, lastUpdated: new Date() };
-      const mockKeywords: KeyValue[] = [
+      const mockKeywords: CacheItem<TrendingKeyword>[] = [
         { key: 'key1', value: { keyword: 'key1', score: 1, lastUpdated: new Date() } },
       ];
 
@@ -74,7 +75,7 @@ describe('TrendingKeywordsService', () => {
 
     it('should increment keyword score and evict the least important one if the limit is exceeded', async () => {
       const mockKeyword = { keyword: 'test', score: 5, lastUpdated: new Date() };
-      const mockKeywords: KeyValue[] = Array.from({ length: 501 }, (_, i) => ({
+      const mockKeywords: CacheItem<TrendingKeyword>[] = Array.from({ length: 501 }, (_, i) => ({
         key: `key${i + 1}`,
         value: {
           keyword: `key${i + 1}`,
@@ -106,7 +107,7 @@ describe('TrendingKeywordsService', () => {
 
   describe('getLowestScoreKeyword', () => {
     it('should return the keyword with the lowest score and oldest update time', () => {
-      const mockKeywords: KeyValue[] = [
+      const mockKeywords: CacheItem<TrendingKeyword>[] = [
         {
           key: 'key1',
           value: { keyword: 'key1', score: 1, lastUpdated: new Date('2024-01-01') },

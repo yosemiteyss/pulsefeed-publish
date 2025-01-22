@@ -1,4 +1,4 @@
-import { CacheKeyBuilder, CacheService, KeyValue } from '@pulsefeed/common';
+import { CacheItem, CacheKeyBuilder, CacheService } from '@pulsefeed/common';
 import { PublishCacheKey } from '../../shared';
 import { Injectable } from '@nestjs/common';
 import { TrendingKeyword } from '../model';
@@ -105,7 +105,7 @@ export class TrendingKeywordsService {
     const prefix = CacheKeyBuilder.buildKeyWithParams(PublishCacheKey.TRENDING_KEYWORD.prefix, {
       languageKey: languageKey,
     });
-    const keywordItems = await this.cacheService.getByPrefix(prefix);
+    const keywordItems = await this.cacheService.getByPrefix<TrendingKeyword>(prefix);
     if (keywordItems.length > this.KEYWORD_CACHE_LIMIT_PER_LANG) {
       const lowestScoreKeyword = this.getLowestScoreKeyword(keywordItems);
       if (lowestScoreKeyword) {
@@ -119,8 +119,10 @@ export class TrendingKeywordsService {
    * @param keywordItems
    * @private
    */
-  private getLowestScoreKeyword(keywordItems: KeyValue[]): KeyValue | undefined {
-    let lowestScoreKeyword: KeyValue | undefined = undefined;
+  private getLowestScoreKeyword(
+    keywordItems: CacheItem<TrendingKeyword>[],
+  ): CacheItem<TrendingKeyword> | undefined {
+    let lowestScoreKeyword: CacheItem<TrendingKeyword> | undefined = undefined;
     let lowestScore: number = Infinity;
     let oldestDate: Date | undefined = undefined;
 

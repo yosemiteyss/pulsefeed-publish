@@ -64,13 +64,13 @@ export class PublishFeedService {
 
     // Deserialize request.
     const request = this.deserializePublishFeedRequest(data);
-    this.logger.log(`[Feed]: ${request.feed.link}`, PublishFeedService.name);
-    for (const article of request.articles) {
-      this.logger.log(
-        `# [Title]: ${article.title}, [Description]: ${article.description?.substring(0, 20)}`,
-        PublishFeedService.name,
-      );
-    }
+    // this.logger.log(`[Feed]: ${request.feed.link}`, PublishFeedService.name);
+    // for (const article of request.articles) {
+    //   this.logger.debug!(
+    //     `# [Title]: ${article.title}, [Description]: ${article.description?.substring(0, 20)}`,
+    //     PublishFeedService.name,
+    //   );
+    // }
 
     // Insert feed to db.
     let insertedFeed: Feed;
