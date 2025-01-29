@@ -12,6 +12,9 @@ async function bootstrap() {
       queue: PUBLISH_QUEUE_NAME,
       queueOptions: {
         durable: false,
+        arguments: {
+          'x-message-ttl': 7200000, // 2 hours
+        },
       },
       noAck: false,
       prefetchCount: 3,
