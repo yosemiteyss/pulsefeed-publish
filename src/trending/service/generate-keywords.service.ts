@@ -18,7 +18,7 @@ export class GenerateKeywordsService {
   private readonly openai = new OpenAI({
     baseURL: this.configService.get('OPEN_API_BASE_URL'),
     apiKey: this.configService.get('OPEN_API_API_KEY'),
-    timeout: 15000,
+    timeout: 20000,
     maxRetries: 2,
   });
 
