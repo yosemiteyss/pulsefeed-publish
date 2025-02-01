@@ -1,25 +1,29 @@
 // noinspection DuplicatedCode
 
-import { CacheItem, CacheKeyBuilder, CacheService } from '@pulsefeed/common';
+import {
+  ArticleCategoryEnum,
+  CacheItem,
+  LanguageEnum,
+  TrendingKeyword,
+  TrendingKeywordsRepository,
+} from '@pulsefeed/common';
 import { TrendingKeywordsService } from '../trending-keywords.service';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TrendingKeyword } from '../../model';
-import { PublishCacheKey } from 'src/shared';
 
 describe('TrendingKeywordsService', () => {
   let trendingKeywordsService: TrendingKeywordsService;
-  let cacheService: DeepMockProxy<CacheService>;
+  let trendingKeywordsRepository: DeepMockProxy<TrendingKeywordsRepository>;
 
   beforeEach(async () => {
-    cacheService = mockDeep<CacheService>();
+    trendingKeywordsRepository = mockDeep<TrendingKeywordsRepository>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TrendingKeywordsService,
         {
-          provide: CacheService,
-          useValue: cacheService,
+          provide: TrendingKeywordsRepository,
+          useValue: trendingKeywordsRepository,
         },
       ],
     }).compile();
@@ -27,103 +31,111 @@ describe('TrendingKeywordsService', () => {
     trendingKeywordsService = module.get<TrendingKeywordsService>(TrendingKeywordsService);
   });
 
-  describe('getTrendingKeywordsForLang', () => {
-    it('should return trending keywords for the given language', async () => {
-      const mockKeywords: CacheItem<TrendingKeyword>[] = [
-        { key: 'key1', value: { keyword: 'keyword1', score: 3, lastUpdated: new Date() } },
-        { key: 'key2', value: { keyword: 'keyword2', score: 1, lastUpdated: new Date() } },
+  describe('getTrendingKeywords', () => {
+    it('should get filtered and sorted keywords from repository', async () => {
+      const languageKey = LanguageEnum.en_us;
+      const categoryKey = ArticleCategoryEnum.HEALTH;
+      const size = 2;
+
+      const keywordItems: CacheItem<TrendingKeyword>[] = [
+        { key: 'key-1', value: { keyword: 'keyword-1', score: 1, lastUpdated: new Date() } },
+        { key: 'key-2', value: { keyword: 'keyword-2', score: 2, lastUpdated: new Date() } },
+        { key: 'key-3', value: { keyword: 'keyword-3', score: 3, lastUpdated: new Date() } },
+        { key: 'key-4', value: { keyword: 'keyword-4', score: 4, lastUpdated: new Date() } },
       ];
-      cacheService.getByPrefix.mockResolvedValue(mockKeywords);
 
-      const result = await trendingKeywordsService.getTrendingKeywordsForLang('en', 5);
+      trendingKeywordsRepository.getKeywords.mockResolvedValue(keywordItems);
 
-      expect(cacheService.getByPrefix).toHaveBeenCalledWith(
-        CacheKeyBuilder.buildKeyWithParams(PublishCacheKey.TRENDING_KEYWORD.prefix, {
-          languageKey: 'en',
-        }),
+      const result = await trendingKeywordsService.getTrendingKeywords(
+        languageKey,
+        categoryKey,
+        size,
       );
-      expect(result).toEqual([{ keyword: 'keyword1', score: 3, lastUpdated: expect.any(Date) }]);
+
+      expect(trendingKeywordsRepository.getKeywords).toHaveBeenCalledWith(languageKey, categoryKey);
+      expect(result.length).toBe(size);
+      expect(result[0]).toEqual(keywordItems[3].value);
+      expect(result[1]).toEqual(keywordItems[2].value);
     });
   });
 
   describe('incrementKeyword', () => {
     it('should increment keyword score and not evict any keyword if the limit is not exceeded', async () => {
-      const mockKeyword = { keyword: 'test', score: 5, lastUpdated: new Date() };
-      const mockKeywords: CacheItem<TrendingKeyword>[] = [
-        { key: 'key1', value: { keyword: 'key1', score: 1, lastUpdated: new Date() } },
-      ];
+      const keyword: TrendingKeyword = {
+        keyword: 'keyword-1',
+        score: 1,
+        lastUpdated: new Date(),
+      };
+      const languageKey = LanguageEnum.en_us;
+      const categoryKey = ArticleCategoryEnum.HEALTH;
+      const keywordItems: CacheItem<TrendingKeyword>[] = [];
 
-      cacheService.get.mockResolvedValue(mockKeyword);
-      cacheService.getByPrefix.mockResolvedValue(mockKeywords);
+      trendingKeywordsRepository.getKeyword.mockResolvedValue(keyword);
+      trendingKeywordsRepository.getKeywords.mockResolvedValue(keywordItems);
 
-      await trendingKeywordsService.incrementKeyword('test', 'en', 'category1');
+      await trendingKeywordsService.incrementKeyword(keyword.keyword, languageKey, categoryKey);
 
-      expect(cacheService.get).toHaveBeenCalledWith(
-        CacheKeyBuilder.buildKeyWithParams(PublishCacheKey.TRENDING_KEYWORD.prefix, {
-          languageKey: 'en',
-          categoryKey: 'category1',
-          keyword: 'test',
-        }),
+      expect(trendingKeywordsRepository.getKeyword).toHaveBeenCalledWith(
+        keyword.keyword,
+        languageKey,
+        categoryKey,
       );
-      expect(cacheService.set).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({ keyword: 'test', score: 6 }),
-        PublishCacheKey.TRENDING_KEYWORD.ttl,
+      expect(trendingKeywordsRepository.getKeywords).toHaveBeenCalledWith(languageKey);
+
+      const updatedKeyword: TrendingKeyword = {
+        keyword: keyword.keyword,
+        score: keyword.score + 1,
+        lastUpdated: expect.any(Date),
+      };
+      expect(trendingKeywordsRepository.updateKeyword).toHaveBeenCalledWith(
+        languageKey,
+        categoryKey,
+        updatedKeyword,
       );
-      expect(cacheService.delete).not.toHaveBeenCalled();
+
+      expect(trendingKeywordsRepository.deleteKeyword).not.toHaveBeenCalled();
     });
 
     it('should increment keyword score and evict the least important one if the limit is exceeded', async () => {
-      const mockKeyword = { keyword: 'test', score: 5, lastUpdated: new Date() };
-      const mockKeywords: CacheItem<TrendingKeyword>[] = Array.from({ length: 501 }, (_, i) => ({
-        key: `key${i + 1}`,
+      const keyword: TrendingKeyword = {
+        keyword: 'keyword-1',
+        score: 1,
+        lastUpdated: new Date(),
+      };
+      const keywordItems: CacheItem<TrendingKeyword>[] = Array.from({ length: 501 }, (_, i) => ({
+        key: `key-${i + 1}`,
         value: {
-          keyword: `key${i + 1}`,
+          keyword: `keyword-${i + 1}`,
           score: i + 1,
           lastUpdated: new Date('2024-01-01T00:00:00Z'),
         },
       }));
+      const languageKey = LanguageEnum.en_us;
+      const categoryKey = ArticleCategoryEnum.HEALTH;
 
-      cacheService.get.mockResolvedValue(mockKeyword);
-      cacheService.getByPrefix.mockResolvedValue(mockKeywords);
+      trendingKeywordsRepository.getKeyword.mockResolvedValue(keyword);
+      trendingKeywordsRepository.getKeywords.mockResolvedValue(keywordItems);
 
-      await trendingKeywordsService.incrementKeyword('test', 'en', 'category1');
+      await trendingKeywordsService.incrementKeyword(keyword.keyword, languageKey, categoryKey);
 
-      expect(cacheService.get).toHaveBeenCalledWith(
-        CacheKeyBuilder.buildKeyWithParams(PublishCacheKey.TRENDING_KEYWORD.prefix, {
-          languageKey: 'en',
-          categoryKey: 'category1',
-          keyword: 'test',
-        }),
+      expect(trendingKeywordsRepository.getKeyword).toHaveBeenCalledWith(
+        keyword.keyword,
+        languageKey,
+        categoryKey,
       );
-      expect(cacheService.set).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({ keyword: 'test', score: 6 }),
-        PublishCacheKey.TRENDING_KEYWORD.ttl,
+      expect(trendingKeywordsRepository.getKeywords).toHaveBeenCalledWith(languageKey);
+
+      const updatedKeyword: TrendingKeyword = {
+        ...keyword,
+        score: keyword.score + 1,
+      };
+      expect(trendingKeywordsRepository.updateKeyword).toHaveBeenCalledWith(
+        languageKey,
+        categoryKey,
+        updatedKeyword,
       );
-      expect(cacheService.delete).toHaveBeenCalledWith('key1');
-    });
-  });
 
-  describe('getLowestScoreKeyword', () => {
-    it('should return the keyword with the lowest score and oldest update time', () => {
-      const mockKeywords: CacheItem<TrendingKeyword>[] = [
-        {
-          key: 'key1',
-          value: { keyword: 'key1', score: 1, lastUpdated: new Date('2024-01-01') },
-        },
-        {
-          key: 'key2',
-          value: { keyword: 'key2', score: 2, lastUpdated: new Date('2024-01-02') },
-        },
-        {
-          key: 'key3',
-          value: { keyword: 'key3', score: 1, lastUpdated: new Date('2023-12-31') },
-        },
-      ];
-
-      const result = trendingKeywordsService['getLowestScoreKeyword'](mockKeywords);
-      expect(result).toEqual(mockKeywords[2]);
+      expect(trendingKeywordsRepository.deleteKeyword).toHaveBeenCalledWith(keywordItems[0]);
     });
   });
 });

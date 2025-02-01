@@ -1,11 +1,9 @@
-import { CacheItem, CacheKeyBuilder, CacheService } from '@pulsefeed/common';
-import { PublishCacheKey } from '../../shared';
+import { CacheItem, TrendingKeyword, TrendingKeywordsRepository } from '@pulsefeed/common';
 import { Injectable } from '@nestjs/common';
-import { TrendingKeyword } from '../model';
 
 @Injectable()
 export class TrendingKeywordsService {
-  constructor(private readonly cacheService: CacheService) {}
+  constructor(private readonly trendingKeywordsRepository: TrendingKeywordsRepository) {}
 
   /**
    * Maximum number of cacheable keywords per language.
@@ -20,55 +18,28 @@ export class TrendingKeywordsService {
   private readonly KEYWORD_TRENDING_MIN_SCORE = 2;
 
   /**
-   * Returns the trending keywords for the given language.
-   * @param languageKey the language key.
-   * @param size number of keywords.
-   * @returns array of keywords.
-   */
-  async getTrendingKeywordsForLang(
-    languageKey: string,
-    size: number = 10,
-  ): Promise<TrendingKeyword[]> {
-    return this.getTrendingKeywords(languageKey, undefined, size);
-  }
-
-  /**
-   * Returns the trending keywords for the given category.
+   * Returns filtered and ordered trending keywords.
+   * If category key is not provided, return keywords from all categories for
+   * the given language.
+   *
    * @param languageKey the language key.
    * @param categoryKey the category key.
-   * @param size number of keywords.
+   * @param size the number of keywords.
    * @returns array of keywords.
    */
-  async getTrendingKeywordsForCategory(
-    languageKey: string,
-    categoryKey: string,
-    size: number = 10,
-  ): Promise<TrendingKeyword[]> {
-    return this.getTrendingKeywords(languageKey, categoryKey, size);
-  }
-
-  /**
-   * Returns the trending keywords.
-   * @param languageKey the language key.
-   * @param categoryKey the category key.
-   * @param size number of keywords.
-   * @returns array of keywords.
-   * @private
-   */
-  private async getTrendingKeywords(
+  async getTrendingKeywords(
     languageKey: string,
     categoryKey?: string,
     size: number = 10,
   ): Promise<TrendingKeyword[]> {
-    const prefix = CacheKeyBuilder.buildKeyWithParams(PublishCacheKey.TRENDING_KEYWORD.prefix, {
-      languageKey: languageKey,
-      categoryKey: categoryKey,
-    });
-    const keywordItems = await this.cacheService.getByPrefix(prefix);
-    const trendingKeywords = keywordItems.map((item) => item.value as TrendingKeyword);
+    const keywordItems = await this.trendingKeywordsRepository.getKeywords(
+      languageKey,
+      categoryKey,
+    );
+    const keywords = keywordItems.map((item) => item.value);
 
-    // Filter out keywords below min scores
-    let sortedKeywords = trendingKeywords.filter(
+    // Filter out keywords below min scores.
+    let sortedKeywords = keywords.filter(
       (keyword) => keyword.score >= this.KEYWORD_TRENDING_MIN_SCORE,
     );
 
@@ -83,33 +54,30 @@ export class TrendingKeywordsService {
    * Increment keyword scores.
    */
   async incrementKeyword(keyword: string, languageKey: string, categoryKey: string) {
-    const cacheKey = CacheKeyBuilder.buildKeyWithParams(PublishCacheKey.TRENDING_KEYWORD.prefix, {
-      languageKey: languageKey,
-      categoryKey: categoryKey,
-      keyword: keyword,
-    });
+    const cachedKeyword = await this.trendingKeywordsRepository.getKeyword(
+      keyword,
+      languageKey,
+      categoryKey,
+    );
 
     // Calculate and set new score of the keyword.
-    const cachedKeyword = await this.cacheService.get<TrendingKeyword>(cacheKey);
     const currentScore = cachedKeyword?.score;
     const newScore = currentScore ? currentScore + 1 : 1;
 
-    const trendingKeyword: TrendingKeyword = {
+    const updatedKeyword: TrendingKeyword = {
       keyword: keyword,
       score: newScore,
       lastUpdated: new Date(),
     };
-    await this.cacheService.set(cacheKey, trendingKeyword, PublishCacheKey.TRENDING_KEYWORD.ttl);
+
+    await this.trendingKeywordsRepository.updateKeyword(languageKey, categoryKey, updatedKeyword);
 
     // If the number of stored keywords per language exceeds the limit, evict the least important one.
-    const prefix = CacheKeyBuilder.buildKeyWithParams(PublishCacheKey.TRENDING_KEYWORD.prefix, {
-      languageKey: languageKey,
-    });
-    const keywordItems = await this.cacheService.getByPrefix<TrendingKeyword>(prefix);
+    const keywordItems = await this.trendingKeywordsRepository.getKeywords(languageKey);
     if (keywordItems.length > this.KEYWORD_CACHE_LIMIT_PER_LANG) {
       const lowestScoreKeyword = this.getLowestScoreKeyword(keywordItems);
       if (lowestScoreKeyword) {
-        await this.cacheService.delete(lowestScoreKeyword.key);
+        await this.trendingKeywordsRepository.deleteKeyword(lowestScoreKeyword);
       }
     }
   }
