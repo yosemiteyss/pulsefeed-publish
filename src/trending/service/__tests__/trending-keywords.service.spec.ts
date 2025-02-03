@@ -128,6 +128,7 @@ describe('TrendingKeywordsService', () => {
       const updatedKeyword: TrendingKeyword = {
         ...keyword,
         score: keyword.score + 1,
+        lastUpdated: expect.any(Date),
       };
       expect(trendingKeywordsRepository.updateKeyword).toHaveBeenCalledWith(
         languageKey,
