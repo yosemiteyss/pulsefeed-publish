@@ -28,6 +28,11 @@ export class GenerateKeywordsService {
    * @returns array of generated keywords for each article.
    */
   async generateArticlesKeywords(articles: Article[]): Promise<ArticleKeywords[]> {
+    this.logger.log(
+      `Start generating keywords, articles size: ${articles.length}`,
+      GenerateKeywordsService.name,
+    );
+
     const articleTitles = articles.map((article) => article.title);
 
     const inputs = articleTitles.map((title) => `- "${title}"`).join('\n');
@@ -52,35 +57,40 @@ export class GenerateKeywordsService {
       throw new EmptyResponseException('Response content is null');
     }
 
-    const jsonString = this.extractJsonContent(response);
-    const keywordsList = this.jsonToStringArray(jsonString);
+    const jsonString = this.extractJsonResponse(response);
+    const keywordsList = this.parseJsonToKeywordsByTitle(jsonString);
 
-    // Check length mismatch.
-    if (keywordsList.length !== articles.length) {
-      throw new EmptyResponseException(
-        `Keywords array length does not match with articles length, keywordsList: ${keywordsList.length}, articles: ${articles.length}`,
-      );
-    }
+    this.logger.log(
+      `Finished generating keywords, keywords list size: ${keywordsList.size}`,
+      keywordsList,
+    );
 
     const results: ArticleKeywords[] = [];
-    for (const [index, article] of articles.entries()) {
-      const updatedKeywords = this.cleanupKeywords(keywordsList[index]);
+    for (const article of articles) {
+      const keywords = keywordsList.get(article.title);
+      if (!keywords) {
+        this.logger.log(
+          `No keywords found for article: ${article.title}`,
+          GenerateKeywordsService.name,
+        );
+        continue;
+      }
+
+      const cleanedKeywords = this.cleanupKeywords(keywords);
       results.push({
         articleId: article.id,
-        keywords: updatedKeywords,
+        keywords: cleanedKeywords,
       });
 
-      this.logger.log(
-        `Article: '${article.title}', keywords: ${keywordsList[index]}`,
-        GenerateKeywordsService.name,
-      );
+      this.logger.log(`'${article.title}': [${cleanedKeywords}]`, GenerateKeywordsService.name);
     }
 
     return results;
   }
 
   /**
-   * Extract content from json format block.
+   * Extract json response from markdown block.
+   * If the response is not wrapped in a markdown block, return it.
    * ```json
    * [['123', '456']]
    * ```
@@ -88,44 +98,57 @@ export class GenerateKeywordsService {
    * @returns json content.
    * @private
    */
-  private extractJsonContent(response: string): string {
-    const jsonBlockMatch = response.match(/```json([\s\S]*?)```/);
-    let jsonString: string;
-    if (jsonBlockMatch) {
-      jsonString = jsonBlockMatch[1].trim();
-    } else {
-      jsonString = response;
-    }
+  private extractJsonResponse(response: string): string {
+    const blockMatch = response.match(/```json([\s\S]*?)```/);
+    const jsonString = blockMatch ? blockMatch[1] : response;
     return jsonString.trim();
   }
 
   /**
-   * Validate json string is valid, and convert to array.
-   * @param json json content.
-   * @returns json array.
+   * Validate JSON string, extract and convert it to a Map<string, string[]>,
+   * where each key is an article title and each value is an array of keywords.
+   * @param json JSON content as a string.
+   * @returns A Map<string, string[]> where each key is an article title and the value is its corresponding keywords.
+   * @throws JsonParseException if the JSON is invalid or not in the expected format.
    * @private
    */
-  private jsonToStringArray(json: string): string[][] {
-    let parsed: any[];
+  private parseJsonToKeywordsByTitle(json: string): Map<string, string[]> {
+    let parsedJson: any;
     try {
-      parsed = JSON.parse(json);
+      parsedJson = JSON.parse(json);
     } catch (err) {
-      throw new JsonParseException(`Failed to parse json response: ${json}`);
+      throw new JsonParseException(`Failed to parse JSON response: ${json}`);
     }
 
-    if (!Array.isArray(parsed)) {
-      throw new JsonParseException(`Json response is not an array: ${parsed}`);
+    // Check if the parsed result is an object
+    if (typeof parsedJson !== 'object' || parsedJson === null) {
+      throw new JsonParseException(`JSON response is not an object: ${JSON.stringify(parsedJson)}`);
     }
 
-    if (
-      !parsed.every(
-        (item) => Array.isArray(item) && item.every((subItem) => typeof subItem === 'string'),
-      )
-    ) {
-      throw new JsonParseException(`Json array contains invalid data types: ${parsed}`);
+    const result = new Map<string, string[]>();
+
+    // Ensure each key is a string (title) and each value is an array of strings (keywords)
+    for (const title in parsedJson) {
+      if (parsedJson.hasOwnProperty(title)) {
+        const keywords = parsedJson[title];
+
+        if (!Array.isArray(keywords)) {
+          throw new JsonParseException(
+            `Keywords for title "${title}" should be an array: ${JSON.stringify(keywords)}`,
+          );
+        }
+
+        if (!keywords.every((keyword) => typeof keyword === 'string')) {
+          throw new JsonParseException(
+            `Keywords for title "${title}" contain invalid data types: ${JSON.stringify(keywords)}`,
+          );
+        }
+
+        result.set(title, keywords);
+      }
     }
 
-    return parsed;
+    return result;
   }
 
   /**
