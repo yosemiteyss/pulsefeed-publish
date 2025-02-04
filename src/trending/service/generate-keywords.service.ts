@@ -1,19 +1,15 @@
 import { GENERATE_ARTICLE_KEYWORDS_PROMPT, GENERATE_ARTICLE_KEYWORDS_SYS_MSG } from '../constants';
 import { EmptyResponseException } from '@nestjs/microservices/errors/empty-response.exception';
-import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { JsonParseException } from '../exception';
 import { ConfigService } from '@nestjs/config';
 import { Article } from '@pulsefeed/common';
+import { Injectable } from '@nestjs/common';
 import { ArticleKeywords } from '../model';
 import OpenAI from 'openai';
 
 @Injectable()
 export class GenerateKeywordsService {
-  constructor(
-    @Inject(WINSTON_MODULE_NEST_PROVIDER) protected readonly logger: LoggerService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   private readonly openai = new OpenAI({
     baseURL: this.configService.get('OPEN_API_BASE_URL'),
@@ -31,11 +27,6 @@ export class GenerateKeywordsService {
    * @returns array of generated keywords.
    */
   async generateArticleKeywords(article: Article): Promise<ArticleKeywords> {
-    this.logger.log(
-      `Start generating keywords, article id: ${article.id}`,
-      GenerateKeywordsService.name,
-    );
-
     const prompt = GENERATE_ARTICLE_KEYWORDS_PROMPT(article.title);
 
     const completion: OpenAI.Chat.ChatCompletion = await this.openai.chat.completions.create({
@@ -61,13 +52,6 @@ export class GenerateKeywordsService {
     const keywords = this.parseJsonToKeywords(jsonString);
 
     const cleanedKeywords = this.cleanupKeywords(keywords);
-
-    this.logger.log(
-      `Finished generating keywords, article id: ${article.id}, keywords size: ${cleanedKeywords.length}`,
-      GenerateKeywordsService.name,
-    );
-
-    this.logger.log(`'${article.title}': [${cleanedKeywords}]`, GenerateKeywordsService.name);
 
     return {
       articleId: article.id,

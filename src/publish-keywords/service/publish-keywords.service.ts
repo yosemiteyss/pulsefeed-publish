@@ -23,6 +23,7 @@ export class PublishKeywordsService {
   async publishKeywords(event: PublishArticleKeywordsDto, context: RmqContext) {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
+    const startTime = Date.now();
 
     try {
       // Get article by id.
@@ -51,6 +52,13 @@ export class PublishKeywordsService {
           await this.trendingKeywordsService.incrementKeyword(keyword, language, article.category);
         }
       }
+
+      const elapsedTime = Date.now() - startTime;
+
+      this.logger.log(
+        `Published keywords: [${articleKeywords.keywords}], title: ${event.title}, time taken: ${elapsedTime} ms`,
+        PublishKeywordsService.name,
+      );
 
       channel.ack(originalMessage);
     } catch (error) {
