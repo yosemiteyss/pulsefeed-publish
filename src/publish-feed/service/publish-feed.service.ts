@@ -95,9 +95,7 @@ export class PublishFeedService {
       // Mark isPublished flag to true.
       await this.articleRepository.publish(insertedArticles);
 
-      // Calculate used time.
-      const endTime = Date.now();
-      const elapsedTime = endTime - startTime;
+      const elapsedTime = Date.now() - startTime;
 
       this.logger.log(
         `Published articles: ${insertedArticles.length}, feed: ${insertedFeed.link}, time taken: ${elapsedTime} ms`,
