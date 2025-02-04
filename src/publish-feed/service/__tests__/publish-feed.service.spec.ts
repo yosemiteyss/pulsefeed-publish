@@ -12,6 +12,7 @@ import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ArticleRepository } from '../../../shared';
+import { ConsumeMessage, Channel } from 'amqplib';
 import { LoggerService } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Observable } from 'rxjs';
@@ -24,12 +25,9 @@ describe('PublishFeedService', () => {
   let loggerService: DeepMockProxy<LoggerService>;
   let publishClient: DeepMockProxy<ClientProxy>;
   let remoteConfigService: DeepMockProxy<RemoteConfigService>;
+  let channel: DeepMockProxy<Channel>;
+  let consumeMessage: DeepMockProxy<ConsumeMessage>;
 
-  const mockedChannel = {
-    ack: jest.fn(),
-    nack: jest.fn(),
-  };
-  const mockedMessage: Record<string, any> = {};
   const mockedFeed: PublishFeedDto = {
     feed: {
       id: 'id',
@@ -56,6 +54,9 @@ describe('PublishFeedService', () => {
     loggerService = mockDeep<LoggerService>();
     publishClient = mockDeep<ClientProxy>();
     remoteConfigService = mockDeep<RemoteConfigService>();
+
+    channel = mockDeep<Channel>();
+    consumeMessage = mockDeep<ConsumeMessage>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -85,8 +86,8 @@ describe('PublishFeedService', () => {
 
     publishFeedService = module.get<PublishFeedService>(PublishFeedService);
 
-    context.getChannelRef.mockReturnValue(mockedChannel);
-    context.getMessage.mockReturnValue(mockedMessage);
+    context.getChannelRef.mockReturnValue(channel);
+    context.getMessage.mockReturnValue(consumeMessage);
   });
 
   describe('publishFeed', () => {
@@ -95,7 +96,7 @@ describe('PublishFeedService', () => {
 
       await publishFeedService.publishFeed(mockedFeed, context);
 
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, false);
     });
 
     it('should insert articles to db, without publishing keywords', async () => {
@@ -107,7 +108,7 @@ describe('PublishFeedService', () => {
 
       expect(articleRepository.create).toHaveBeenCalled();
       expect(articleRepository.publish).toHaveBeenCalled();
-      expect(mockedChannel.ack).toHaveBeenCalledWith(mockedMessage);
+      expect(channel.ack).toHaveBeenCalledWith(consumeMessage);
     });
 
     it('should insert articles to db, and publish keywords', async () => {
@@ -121,7 +122,7 @@ describe('PublishFeedService', () => {
       expect(articleRepository.create).toHaveBeenCalled();
       expect(articleRepository.publish).toHaveBeenCalled();
       expect(publishClient.emit).toHaveBeenCalledTimes(mockedFeed.articles.length);
-      expect(mockedChannel.ack).toHaveBeenCalledWith(mockedMessage);
+      expect(channel.ack).toHaveBeenCalledWith(consumeMessage);
     });
 
     it('should nack and not requeue for unknown error', async () => {
@@ -133,13 +134,14 @@ describe('PublishFeedService', () => {
 
       await publishFeedService.publishFeed(mockedFeed, context);
 
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, false);
     });
 
     it('should requeue message when prisma deadlock detected', async () => {
       feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
-      context.getChannelRef.mockReturnValue(mockedChannel);
-      context.getMessage.mockReturnValue(mockedMessage);
+      context.getChannelRef.mockReturnValue(channel);
+      consumeMessage.fields.redelivered = false;
+      context.getMessage.mockReturnValue(consumeMessage);
       articleRepository.create.mockImplementation(async () => {
         throw new Prisma.PrismaClientUnknownRequestError('40P01 deadlock detected', {
           clientVersion: '1',
@@ -149,7 +151,24 @@ describe('PublishFeedService', () => {
 
       await publishFeedService.publishFeed(mockedFeed, context);
 
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, true);
+    });
+
+    it('should nack and not requeue when prisma deadlock detected after requeue once', async () => {
+      feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
+      context.getChannelRef.mockReturnValue(channel);
+      consumeMessage.fields.redelivered = true;
+      context.getMessage.mockReturnValue(consumeMessage);
+      articleRepository.create.mockImplementation(async () => {
+        throw new Prisma.PrismaClientUnknownRequestError('40P01 deadlock detected', {
+          clientVersion: '1',
+          batchRequestIdx: 1,
+        });
+      });
+
+      await publishFeedService.publishFeed(mockedFeed, context);
+
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, false);
     });
   });
 });

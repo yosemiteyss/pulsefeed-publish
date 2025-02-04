@@ -7,6 +7,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ArticleRepository } from '../../../shared';
 import { RmqContext } from '@nestjs/microservices';
+import { ConsumeMessage, Channel } from 'amqplib';
 import { LoggerService } from '@nestjs/common';
 import OpenAI from 'openai';
 
@@ -17,12 +18,8 @@ describe('PublishKeywordsService', () => {
   let loggerService: DeepMockProxy<LoggerService>;
   let trendingKeywordsService: DeepMockProxy<TrendingKeywordsService>;
   let generateKeywordsService: DeepMockProxy<GenerateKeywordsService>;
-
-  const mockedChannel = {
-    ack: jest.fn(),
-    nack: jest.fn(),
-  };
-  const mockedMessage: Record<string, any> = {};
+  let channel: DeepMockProxy<Channel>;
+  let consumeMessage: DeepMockProxy<ConsumeMessage>;
 
   beforeEach(async () => {
     articleRepository = mockDeep<ArticleRepository>();
@@ -30,6 +27,8 @@ describe('PublishKeywordsService', () => {
     loggerService = mockDeep<LoggerService>();
     trendingKeywordsService = mockDeep<TrendingKeywordsService>();
     generateKeywordsService = mockDeep<GenerateKeywordsService>();
+    channel = mockDeep<Channel>();
+    consumeMessage = mockDeep<ConsumeMessage>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -55,8 +54,8 @@ describe('PublishKeywordsService', () => {
 
     publishKeywordsService = module.get(PublishKeywordsService);
 
-    context.getChannelRef.mockReturnValue(mockedChannel);
-    context.getMessage.mockReturnValue(mockedMessage);
+    context.getChannelRef.mockReturnValue(channel);
+    context.getMessage.mockReturnValue(consumeMessage);
   });
 
   describe('publishKeywords', () => {
@@ -69,7 +68,7 @@ describe('PublishKeywordsService', () => {
       };
       await publishKeywordsService.publishKeywords(event, context);
 
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, false);
     });
 
     it('should generate keywords, save keywords to db, and increment keyword rankings', async () => {
@@ -96,7 +95,7 @@ describe('PublishKeywordsService', () => {
 
       expect(articleRepository.updateKeywords).toHaveBeenCalled();
       expect(trendingKeywordsService.incrementKeyword).toHaveBeenCalled();
-      expect(mockedChannel.ack).toHaveBeenCalled();
+      expect(channel.ack).toHaveBeenCalled();
     });
 
     it('should nack when generate keywords failed', async () => {
@@ -120,7 +119,7 @@ describe('PublishKeywordsService', () => {
 
       await publishKeywordsService.publishKeywords(event, context);
 
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, false);
     });
 
     it('should nack and requeue when generate keywords failed with openai error 429', async () => {
@@ -141,10 +140,36 @@ describe('PublishKeywordsService', () => {
       generateKeywordsService.generateArticleKeywords.mockRejectedValue(
         new OpenAI.APIError(429, new Error(), undefined, undefined),
       );
+      consumeMessage.fields.redelivered = false;
 
       await publishKeywordsService.publishKeywords(event, context);
 
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, true);
+    });
+
+    it('should nack and not requeue when generate keywords failed with openai error 429 after requeue once', async () => {
+      const event: PublishArticleKeywordsDto = {
+        id: 'id',
+        title: 'title',
+      };
+      const article: Article = {
+        id: event.id,
+        title: event.title,
+        link: 'link',
+        category: ArticleCategoryEnum.LOCAL,
+        sourceId: 'sourceId',
+        languages: [LanguageEnum.en_us],
+      };
+
+      articleRepository.getArticle.mockResolvedValue(article);
+      generateKeywordsService.generateArticleKeywords.mockRejectedValue(
+        new OpenAI.APIError(429, new Error(), undefined, undefined),
+      );
+      consumeMessage.fields.redelivered = true;
+
+      await publishKeywordsService.publishKeywords(event, context);
+
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, false);
     });
 
     it('should nack when increment keywords failed', async () => {
@@ -170,7 +195,7 @@ describe('PublishKeywordsService', () => {
 
       await publishKeywordsService.publishKeywords(event, context);
 
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+      expect(channel.nack).toHaveBeenCalledWith(consumeMessage, false, false);
     });
   });
 });
