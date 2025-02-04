@@ -1,19 +1,22 @@
 import {
-  Article,
   Feed,
   FeedRepository,
   PublishFeedDto,
+  RMQ_CLIENT,
   RemoteConfigKey,
   RemoteConfigService,
+  PUBLISH_KEYWORDS_PATTERN,
 } from '@pulsefeed/common';
-import { InvalidJSONFormatException } from '@nestjs/microservices/errors/invalid-json-format.exception';
-import { GenerateKeywordsService, TrendingKeywordsService } from '../../trending';
-import { PublishFeedTaskService } from './publish-feed-task.service';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { ClientProxy, RmqContext } from '@nestjs/microservices';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { RmqContext } from '@nestjs/microservices';
 import { ArticleRepository } from '../../shared';
 import { Prisma } from '@prisma/client';
+
+export interface PublishArticleKeywordsDto {
+  readonly id: string;
+  readonly title: string;
+}
 
 @Injectable()
 export class PublishFeedService {
@@ -21,17 +24,9 @@ export class PublishFeedService {
     private readonly feedRepository: FeedRepository,
     private readonly articleRepository: ArticleRepository,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
-    private readonly generateKeywordsService: GenerateKeywordsService,
-    private readonly trendingKeywordsService: TrendingKeywordsService,
+    @Inject(RMQ_CLIENT) private readonly publishClient: ClientProxy,
     private readonly remoteConfigService: RemoteConfigService,
-    private readonly publishFeedTaskService: PublishFeedTaskService,
   ) {}
-
-  /**
-   * Maximum number of retry attempts for generating keywords.
-   * @private
-   */
-  private readonly GENERATE_KEYWORDS_MAX_RETRIES = 2;
 
   // async onModuleInit() {
   //   const trendingKeywords = await this.trendingKeywordsService.getTrendingKeywordsForLang('zh-hk');
@@ -54,57 +49,43 @@ export class PublishFeedService {
 
   /**
    * Handle the publishing of feed.
-   * @param data the feed data received.
+   * @param event the publish feed event.
    * @param context rmq context for the message.
    */
-  async publishFeed(data: string, context: RmqContext) {
+  async publishFeed(event: PublishFeedDto, context: RmqContext) {
     const channel = context.getChannelRef();
     const originalMessage = context.getMessage();
     const startTime = Date.now();
 
-    // Deserialize request.
-    const request = this.deserializePublishFeedRequest(data);
-    // this.logger.log(`[Feed]: ${request.feed.link}`, PublishFeedService.name);
-    // for (const article of request.articles) {
-    //   this.logger.debug!(
-    //     `# [Title]: ${article.title}, [Description]: ${article.description?.substring(0, 20)}`,
-    //     PublishFeedService.name,
-    //   );
-    // }
-
     // Insert feed to db.
     let insertedFeed: Feed;
     try {
-      insertedFeed = await this.feedRepository.upsert(request.feed);
+      insertedFeed = await this.feedRepository.upsert(event.feed);
     } catch (error) {
       this.logger.error(`Failed to upsert feed to db`, error.stack, PublishFeedService.name);
       channel.nack(originalMessage, false, false);
       return;
     }
 
-    // Add publish feed task.
-    const publishFeedTaskId = await this.createPublishFeedTask(insertedFeed.id);
-    if (!publishFeedTaskId) {
-      this.logger.log(
-        `Send requeue, because failed to add publish feed task to db, `,
-        PublishFeedService.name,
-      );
-      channel.nack(originalMessage, false, true);
-      return;
-    }
-
     // Insert articles to db.
     try {
-      const insertedArticles = await this.articleRepository.create(insertedFeed, request.articles);
+      const insertedArticles = await this.articleRepository.create(insertedFeed, event.articles);
 
-      // Generate article keywords using LLM.
-      if (insertedArticles.length > 0) {
-        const featureLLMKeywords = await this.remoteConfigService.get<boolean>(
-          RemoteConfigKey.FEATURE_LLM_KEYWORDS,
-          false,
-        );
-        if (featureLLMKeywords) {
-          await this.generateKeywords(publishFeedTaskId, insertedArticles);
+      const featureLLMKeywords = await this.remoteConfigService.get<boolean>(
+        RemoteConfigKey.FEATURE_LLM_KEYWORDS,
+        false,
+      );
+
+      // Send publish keywords events to queue.
+      if (true) {
+        for (const article of insertedArticles) {
+          const request: PublishArticleKeywordsDto = {
+            id: article.id,
+            title: article.title,
+          };
+
+          this.publishClient.emit(PUBLISH_KEYWORDS_PATTERN, request);
+          this.logger.log(`Sent publish keywords event, article id: ${article.id}`);
         }
       }
 
@@ -121,13 +102,6 @@ export class PublishFeedService {
       );
 
       channel.ack(originalMessage);
-
-      await this.publishFeedTaskService.updateTask({
-        taskId: publishFeedTaskId,
-        status: 'Succeed',
-        finishedAt: new Date(),
-        publishedArticles: insertedArticles.length,
-      });
     } catch (error) {
       // Requeue when deadlock occurs.
       if (
@@ -135,7 +109,7 @@ export class PublishFeedService {
         error.message.includes('40P01')
       ) {
         this.logger.error(
-          `Deadlock detected: ${request.feed?.link}, send requeue.`,
+          `Deadlock detected: ${event.feed?.link}, send requeue.`,
           error.stack,
           PublishFeedService.name,
         );
@@ -144,87 +118,13 @@ export class PublishFeedService {
       }
 
       this.logger.error(
-        `Failed to publish feed: ${request.feed?.link}`,
+        `Failed to publish feed: ${event.feed?.link}`,
         error.stack,
         PublishFeedService.name,
       );
 
       // Don't requeue.
       channel.nack(originalMessage, false, false);
-
-      await this.publishFeedTaskService.updateTask({
-        taskId: publishFeedTaskId,
-        status: 'Failed',
-        finishedAt: new Date(),
-      });
-    }
-  }
-
-  private deserializePublishFeedRequest(data: string): PublishFeedDto {
-    try {
-      return JSON.parse(data);
-    } catch (error) {
-      throw new InvalidJSONFormatException(error, data);
-    }
-  }
-
-  private async createPublishFeedTask(feedId: string): Promise<string | undefined> {
-    try {
-      return await this.publishFeedTaskService.addTask({
-        feedId: feedId,
-        status: 'PublishArticles',
-      });
-    } catch (error) {
-      this.logger.error(
-        `Failed to add publish feed task to db`,
-        error.stack,
-        PublishFeedService.name,
-      );
-      return undefined;
-    }
-  }
-
-  private async generateKeywords(publishFeedTaskId: string, articles: Article[]) {
-    let retryCount = 0;
-
-    await this.publishFeedTaskService.updateTask({
-      taskId: publishFeedTaskId,
-      status: 'PublishKeywords',
-    });
-
-    while (retryCount < this.GENERATE_KEYWORDS_MAX_RETRIES) {
-      try {
-        const articleKeywords =
-          await this.generateKeywordsService.generateArticlesKeywords(articles);
-
-        // Update keywords of each article.
-        for (const item of articleKeywords) {
-          await this.articleRepository.updateKeywords(item.articleId, item.keywords);
-        }
-
-        // Increment ranking of each keyword.
-        for (const [index, item] of articleKeywords.entries()) {
-          const article = articles[index];
-          for (const language of article.languages) {
-            for (const keyword of item.keywords) {
-              await this.trendingKeywordsService.incrementKeyword(
-                keyword,
-                language,
-                article.category,
-              );
-            }
-          }
-        }
-
-        break;
-      } catch (error) {
-        retryCount++;
-        this.logger.error(
-          `Publish keywords failed #${retryCount}:`,
-          error.stack,
-          PublishFeedService.name,
-        );
-      }
     }
   }
 }

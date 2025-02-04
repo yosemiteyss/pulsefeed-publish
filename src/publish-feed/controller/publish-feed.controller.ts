@@ -1,5 +1,5 @@
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { PATTERN_PUBLISH_FEED } from '@pulsefeed/common';
+import { PUBLISH_FEED_PATTERN, PublishFeedDto } from '@pulsefeed/common';
 import { PublishFeedService } from '../service';
 import { Controller } from '@nestjs/common';
 
@@ -8,12 +8,12 @@ export class PublishFeedController {
   constructor(private readonly publishFeedService: PublishFeedService) {}
 
   /**
-   * Handle the publishing of feed.
-   * @param data the feed data received.
-   * @param context rmq context for the message.
+   * Consume publish feed events.
+   * @param event the event received.
+   * @param context the rmq context.
    */
-  @MessagePattern(PATTERN_PUBLISH_FEED)
-  async publishFeed(@Payload() data: string, @Ctx() context: RmqContext) {
-    await this.publishFeedService.publishFeed(data, context);
+  @MessagePattern(PUBLISH_FEED_PATTERN)
+  async publishFeed(@Payload() event: PublishFeedDto, @Ctx() context: RmqContext) {
+    await this.publishFeedService.publishFeed(event, context);
   }
 }

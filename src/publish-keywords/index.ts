@@ -1,3 +1,3 @@
 export * from './service';
-export * from './publish-feed.module';
 export * from './controller';
+export * from './publish-keywords.module';

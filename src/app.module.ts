@@ -1,6 +1,6 @@
 import { CacheModule, ConfigModule, DatabaseModule, LoggerModule } from '@pulsefeed/common';
+import { PublishKeywordsModule } from './publish-keywords';
 import { PublishFeedModule } from './publish-feed';
-import { TrendingModule } from './trending';
 import { Module } from '@nestjs/common';
 
 @Module({
@@ -9,6 +9,6 @@ import { Module } from '@nestjs/common';
 class CoreModule {}
 
 @Module({
-  imports: [CoreModule, PublishFeedModule, TrendingModule],
+  imports: [CoreModule, PublishFeedModule, PublishKeywordsModule],
 })
 export class AppModule {}
