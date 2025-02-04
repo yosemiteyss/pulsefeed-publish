@@ -8,6 +8,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ArticleRepository } from '../../../shared';
 import { RmqContext } from '@nestjs/microservices';
 import { LoggerService } from '@nestjs/common';
+import OpenAI from 'openai';
 
 describe('PublishKeywordsService', () => {
   let publishKeywordsService: PublishKeywordsService;
@@ -120,6 +121,30 @@ describe('PublishKeywordsService', () => {
       await publishKeywordsService.publishKeywords(event, context);
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
+    });
+
+    it('should nack and requeue when generate keywords failed with openai error 429', async () => {
+      const event: PublishArticleKeywordsDto = {
+        id: 'id',
+        title: 'title',
+      };
+      const article: Article = {
+        id: event.id,
+        title: event.title,
+        link: 'link',
+        category: ArticleCategoryEnum.LOCAL,
+        sourceId: 'sourceId',
+        languages: [LanguageEnum.en_us],
+      };
+
+      articleRepository.getArticle.mockResolvedValue(article);
+      generateKeywordsService.generateArticleKeywords.mockRejectedValue(
+        new OpenAI.APIError(429, new Error(), undefined, undefined),
+      );
+
+      await publishKeywordsService.publishKeywords(event, context);
+
+      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
     });
 
     it('should nack when increment keywords failed', async () => {
