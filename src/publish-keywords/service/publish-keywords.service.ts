@@ -63,16 +63,21 @@ export class PublishKeywordsService {
 
       channel.ack(originalMessage);
     } catch (error) {
-      if (error instanceof OpenAI.APIError && error.status === 429) {
+      if (
+        error instanceof OpenAI.APIError &&
+        error.status === 429 &&
+        !originalMessage.fields.redelivered
+      ) {
         this.logger.log(
           'Requeue event due to too many request error.',
           PublishKeywordsService.name,
         );
-        channel.nack(originalMessage, false, !originalMessage.fields.redelivered);
-      } else {
-        this.logger.error(`Publish keywords failed:`, error.stack, PublishKeywordsService.name);
-        channel.nack(originalMessage, false, false);
+        channel.nack(originalMessage, false, true);
+        return;
       }
+
+      this.logger.error(`Publish keywords failed:`, error.stack, PublishKeywordsService.name);
+      channel.nack(originalMessage, false, false);
     }
   }
 }
