@@ -105,27 +105,25 @@ export class PublishFeedService {
 
       channel.ack(originalMessage);
     } catch (error) {
-      // Requeue when deadlock occurs.
       if (
         error instanceof Prisma.PrismaClientUnknownRequestError &&
-        error.message.includes('40P01')
+        error.message.includes('40P01') &&
+        !originalMessage.fields.redelivered
       ) {
         this.logger.error(
           `Deadlock detected: ${event.feed?.link}, send requeue.`,
           error.stack,
           PublishFeedService.name,
         );
-        channel.nack(originalMessage, false, !originalMessage.fields.redelivered);
+        channel.nack(originalMessage, false, true);
         return;
       }
 
       this.logger.error(
-        `Failed to publish feed: ${event.feed?.link}`,
+        `Publish feed failed: ${event.feed?.link}`,
         error.stack,
         PublishFeedService.name,
       );
-
-      // Don't requeue.
       channel.nack(originalMessage, false, false);
     }
   }
