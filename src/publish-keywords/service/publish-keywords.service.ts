@@ -4,6 +4,7 @@ import { PublishArticleKeywordsDto } from '../../publish-feed';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RmqContext } from '@nestjs/microservices';
 import { ArticleRepository } from '../../shared';
+import OpenAI from 'openai';
 
 @Injectable()
 export class PublishKeywordsService {
@@ -53,8 +54,16 @@ export class PublishKeywordsService {
 
       channel.ack(originalMessage);
     } catch (error) {
-      this.logger.error(`Publish keywords failed:`, error.stack, PublishKeywordsService.name);
-      channel.nack(originalMessage, false, false);
+      if (error instanceof OpenAI.APIError && error.status === 429) {
+        this.logger.log(
+          'Requeue event due to too many request error.',
+          PublishKeywordsService.name,
+        );
+        channel.nack(originalMessage, false, true);
+      } else {
+        this.logger.error(`Publish keywords failed:`, error.stack, PublishKeywordsService.name);
+        channel.nack(originalMessage, false, false);
+      }
     }
   }
 }

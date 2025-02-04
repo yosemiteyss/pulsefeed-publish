@@ -77,7 +77,7 @@ export class PublishFeedService {
       );
 
       // Send publish keywords events to queue.
-      if (true) {
+      if (featureLLMKeywords) {
         for (const article of insertedArticles) {
           const request: PublishArticleKeywordsDto = {
             id: article.id,
@@ -85,7 +85,10 @@ export class PublishFeedService {
           };
 
           this.publishClient.emit(PUBLISH_KEYWORDS_PATTERN, request);
-          this.logger.log(`Sent publish keywords event, article id: ${article.id}`);
+          this.logger.log(
+            `Sent publish keywords event, article id: ${article.id}`,
+            PublishFeedService.name,
+          );
         }
       }
 
