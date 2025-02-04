@@ -4,29 +4,26 @@ import {
   LanguageEnum,
   PublishFeedDto,
   RemoteConfigService,
+  RMQ_CLIENT,
 } from '@pulsefeed/common';
-import { InvalidJSONFormatException } from '@nestjs/microservices/errors/invalid-json-format.exception';
-import { GenerateKeywordsService, TrendingKeywordsService } from '../../../trending';
-import { PublishFeedTaskService } from '../publish-feed-task.service';
+import { ClientProxy, RmqContext } from '@nestjs/microservices';
 import { PublishFeedService } from '../publish-feed.service';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ArticleRepository } from '../../../shared';
-import { RmqContext } from '@nestjs/microservices';
 import { LoggerService } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { Observable } from 'rxjs';
 
 describe('PublishFeedService', () => {
   let publishFeedService: PublishFeedService;
   let context: DeepMockProxy<RmqContext>;
-  let logger: DeepMockProxy<LoggerService>;
   let feedRepository: DeepMockProxy<FeedRepository>;
   let articleRepository: DeepMockProxy<ArticleRepository>;
-  let generateKeywordsService: DeepMockProxy<GenerateKeywordsService>;
-  let trendingKeywordsService: DeepMockProxy<TrendingKeywordsService>;
+  let loggerService: DeepMockProxy<LoggerService>;
+  let publishClient: DeepMockProxy<ClientProxy>;
   let remoteConfigService: DeepMockProxy<RemoteConfigService>;
-  let publishFeedTaskService: DeepMockProxy<PublishFeedTaskService>;
 
   const mockedChannel = {
     ack: jest.fn(),
@@ -54,21 +51,15 @@ describe('PublishFeedService', () => {
 
   beforeEach(async () => {
     context = mockDeep<RmqContext>();
-    logger = mockDeep<LoggerService>();
     feedRepository = mockDeep<FeedRepository>();
     articleRepository = mockDeep<ArticleRepository>();
-    generateKeywordsService = mockDeep<GenerateKeywordsService>();
-    trendingKeywordsService = mockDeep<TrendingKeywordsService>();
+    loggerService = mockDeep<LoggerService>();
+    publishClient = mockDeep<ClientProxy>();
     remoteConfigService = mockDeep<RemoteConfigService>();
-    publishFeedTaskService = mockDeep<PublishFeedTaskService>();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PublishFeedService,
-        {
-          provide: WINSTON_MODULE_NEST_PROVIDER,
-          useValue: logger,
-        },
         {
           provide: FeedRepository,
           useValue: feedRepository,
@@ -78,20 +69,16 @@ describe('PublishFeedService', () => {
           useValue: articleRepository,
         },
         {
-          provide: GenerateKeywordsService,
-          useValue: generateKeywordsService,
+          provide: WINSTON_MODULE_NEST_PROVIDER,
+          useValue: loggerService,
         },
         {
-          provide: TrendingKeywordsService,
-          useValue: trendingKeywordsService,
+          provide: RMQ_CLIENT,
+          useValue: publishClient,
         },
         {
           provide: RemoteConfigService,
           useValue: remoteConfigService,
-        },
-        {
-          provide: PublishFeedTaskService,
-          useValue: publishFeedTaskService,
         },
       ],
     }).compile();
@@ -103,99 +90,50 @@ describe('PublishFeedService', () => {
   });
 
   describe('publishFeed', () => {
-    it('should throw InvalidJSONFormatException when deserialize dto failed', async () => {
-      const json = 'invalid';
-
-      await expect(publishFeedService.publishFeed(json, context)).rejects.toThrow(
-        InvalidJSONFormatException,
-      );
-      expect(mockedChannel.nack).not.toHaveBeenCalled();
-    });
-
-    it('should requeue when create publish feed task failed', async () => {
-      feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
-      publishFeedTaskService.addTask.mockRejectedValue(new Error('db error'));
-
-      const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, context);
-
-      expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
-    });
-
     it('should not requeue when upsert feed to db failed', async () => {
       feedRepository.upsert.mockRejectedValue(new Error('db error'));
 
-      const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, context);
+      await publishFeedService.publishFeed(mockedFeed, context);
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
     });
 
     it('should insert articles to db, without publishing keywords', async () => {
-      const publishFeedTaskId = 'id';
       feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       articleRepository.create.mockResolvedValue(mockedFeed.articles);
       remoteConfigService.get.mockResolvedValue(false); // no keywords
-      publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
 
-      const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, context);
+      await publishFeedService.publishFeed(mockedFeed, context);
 
       expect(articleRepository.create).toHaveBeenCalled();
       expect(articleRepository.publish).toHaveBeenCalled();
       expect(mockedChannel.ack).toHaveBeenCalledWith(mockedMessage);
-      expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
-        taskId: publishFeedTaskId,
-        status: 'Succeed',
-        finishedAt: expect.any(Date),
-        publishedArticles: mockedFeed.articles.length,
-      });
     });
 
     it('should insert articles to db, and publish keywords', async () => {
-      const publishFeedTaskId = 'id';
       feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       articleRepository.create.mockResolvedValue(mockedFeed.articles);
       remoteConfigService.get.mockResolvedValue(true); // feature enabled
-      publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
+      publishClient.emit.mockReturnValue(new Observable());
 
-      const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, context);
+      await publishFeedService.publishFeed(mockedFeed, context);
 
       expect(articleRepository.create).toHaveBeenCalled();
       expect(articleRepository.publish).toHaveBeenCalled();
-      expect(generateKeywordsService.generateArticlesKeywords).toHaveBeenCalled();
+      expect(publishClient.emit).toHaveBeenCalledTimes(mockedFeed.articles.length);
       expect(mockedChannel.ack).toHaveBeenCalledWith(mockedMessage);
-      expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
-        taskId: publishFeedTaskId,
-        status: 'PublishKeywords',
-      });
-      expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
-        taskId: publishFeedTaskId,
-        status: 'Succeed',
-        finishedAt: expect.any(Date),
-        publishedArticles: mockedFeed.articles.length,
-      });
     });
 
     it('should nack and not requeue for unknown error', async () => {
-      const publishFeedTaskId = 'id';
       feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       remoteConfigService.get.mockResolvedValue(false); // no keywords
-      publishFeedTaskService.addTask.mockResolvedValue(publishFeedTaskId);
       articleRepository.create.mockImplementation(async () => {
         throw new Error('unknown error');
       });
 
-      const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, context);
+      await publishFeedService.publishFeed(mockedFeed, context);
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, false);
-      expect(publishFeedTaskService.updateTask).toHaveBeenCalledWith({
-        taskId: publishFeedTaskId,
-        status: 'Failed',
-        finishedAt: expect.any(Date),
-      });
     });
 
     it('should requeue message when prisma deadlock detected', async () => {
@@ -209,8 +147,7 @@ describe('PublishFeedService', () => {
         });
       });
 
-      const json = JSON.stringify(mockedFeed);
-      await publishFeedService.publishFeed(json, context);
+      await publishFeedService.publishFeed(mockedFeed, context);
 
       expect(mockedChannel.nack).toHaveBeenCalledWith(mockedMessage, false, true);
     });

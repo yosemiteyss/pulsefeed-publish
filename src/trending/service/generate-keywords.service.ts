@@ -1,5 +1,5 @@
+import { GENERATE_ARTICLE_KEYWORDS_PROMPT, GENERATE_ARTICLE_KEYWORDS_SYS_MSG } from '../constants';
 import { EmptyResponseException } from '@nestjs/microservices/errors/empty-response.exception';
-import { GENERATE_KEYWORDS_PROMPT, GENERATE_KEYWORDS_SYS_MSG } from '../constants';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { JsonParseException } from '../exception';
@@ -18,35 +18,35 @@ export class GenerateKeywordsService {
   private readonly openai = new OpenAI({
     baseURL: this.configService.get('OPEN_API_BASE_URL'),
     apiKey: this.configService.get('OPEN_API_API_KEY'),
-    timeout: 20000,
+    timeout: 15000,
     maxRetries: 2,
+    // defaultHeaders: {
+    //   Authorization: `Bearer S1JCIb*OmnezA4J*kTrC84GxFwwyUbY3MgwYfbyzzp_8Gn1gsBy1ogROHqapzX0Ccdoyjkd$LKdR0`,
+    // },
   });
 
   /**
-   * Generate keywords for articles.
-   * @param articles the article list.
-   * @returns array of generated keywords for each article.
+   * Generate keywords for article.
+   * @param article the article.
+   * @returns array of generated keywords.
    */
-  async generateArticlesKeywords(articles: Article[]): Promise<ArticleKeywords[]> {
+  async generateArticleKeywords(article: Article): Promise<ArticleKeywords> {
     this.logger.log(
-      `Start generating keywords, articles size: ${articles.length}`,
+      `Start generating keywords, article id: ${article.id}`,
       GenerateKeywordsService.name,
     );
 
-    const articleTitles = articles.map((article) => article.title);
-
-    const inputs = articleTitles.map((title) => `- "${title}"`).join('\n');
-    const updatedPrompt = GENERATE_KEYWORDS_PROMPT.replace('{inputs}', inputs);
+    const prompt = GENERATE_ARTICLE_KEYWORDS_PROMPT(article.title);
 
     const completion: OpenAI.Chat.ChatCompletion = await this.openai.chat.completions.create({
       messages: [
         {
           role: 'system',
-          content: GENERATE_KEYWORDS_SYS_MSG,
+          content: GENERATE_ARTICLE_KEYWORDS_SYS_MSG,
         },
         {
           role: 'user',
-          content: updatedPrompt,
+          content: prompt,
         },
       ],
       model: 'gpt-3.5-turbo',
@@ -58,34 +58,21 @@ export class GenerateKeywordsService {
     }
 
     const jsonString = this.extractJsonResponse(response);
-    const keywordsList = this.parseJsonToKeywordsByTitle(jsonString);
+    const keywords = this.parseJsonToKeywords(jsonString);
+
+    const cleanedKeywords = this.cleanupKeywords(keywords);
 
     this.logger.log(
-      `Finished generating keywords, keywords list size: ${keywordsList.size}`,
-      keywordsList,
+      `Finished generating keywords, article id: ${article.id}, keywords size: ${cleanedKeywords.length}`,
+      GenerateKeywordsService.name,
     );
 
-    const results: ArticleKeywords[] = [];
-    for (const article of articles) {
-      const keywords = keywordsList.get(article.title);
-      if (!keywords) {
-        this.logger.log(
-          `No keywords found for article: ${article.title}`,
-          GenerateKeywordsService.name,
-        );
-        continue;
-      }
+    this.logger.log(`'${article.title}': [${cleanedKeywords}]`, GenerateKeywordsService.name);
 
-      const cleanedKeywords = this.cleanupKeywords(keywords);
-      results.push({
-        articleId: article.id,
-        keywords: cleanedKeywords,
-      });
-
-      this.logger.log(`'${article.title}': [${cleanedKeywords}]`, GenerateKeywordsService.name);
-    }
-
-    return results;
+    return {
+      articleId: article.id,
+      keywords: cleanedKeywords,
+    };
   }
 
   /**
@@ -105,14 +92,13 @@ export class GenerateKeywordsService {
   }
 
   /**
-   * Validate JSON string, extract and convert it to a Map<string, string[]>,
-   * where each key is an article title and each value is an array of keywords.
+   * Validate JSON string, extract and convert it to a string array of keywords.
    * @param json JSON content as a string.
-   * @returns A Map<string, string[]> where each key is an article title and the value is its corresponding keywords.
+   * @returns A string array containing extracted keywords.
    * @throws JsonParseException if the JSON is invalid or not in the expected format.
    * @private
    */
-  private parseJsonToKeywordsByTitle(json: string): Map<string, string[]> {
+  private parseJsonToKeywords(json: string): string[] {
     let parsedJson: any;
     try {
       parsedJson = JSON.parse(json);
@@ -120,35 +106,18 @@ export class GenerateKeywordsService {
       throw new JsonParseException(`Failed to parse JSON response: ${json}`);
     }
 
-    // Check if the parsed result is an object
-    if (typeof parsedJson !== 'object' || parsedJson === null) {
-      throw new JsonParseException(`JSON response is not an object: ${JSON.stringify(parsedJson)}`);
+    // Ensure the parsed result is an array of strings
+    if (!Array.isArray(parsedJson)) {
+      throw new JsonParseException(`JSON response is not an array: ${JSON.stringify(parsedJson)}`);
     }
 
-    const result = new Map<string, string[]>();
-
-    // Ensure each key is a string (title) and each value is an array of strings (keywords)
-    for (const title in parsedJson) {
-      if (parsedJson.hasOwnProperty(title)) {
-        const keywords = parsedJson[title];
-
-        if (!Array.isArray(keywords)) {
-          throw new JsonParseException(
-            `Keywords for title "${title}" should be an array: ${JSON.stringify(keywords)}`,
-          );
-        }
-
-        if (!keywords.every((keyword) => typeof keyword === 'string')) {
-          throw new JsonParseException(
-            `Keywords for title "${title}" contain invalid data types: ${JSON.stringify(keywords)}`,
-          );
-        }
-
-        result.set(title, keywords);
-      }
+    if (!parsedJson.every((keyword) => typeof keyword === 'string')) {
+      throw new JsonParseException(
+        `Keywords contain invalid data types: ${JSON.stringify(parsedJson)}`,
+      );
     }
 
-    return result;
+    return parsedJson;
   }
 
   /**
