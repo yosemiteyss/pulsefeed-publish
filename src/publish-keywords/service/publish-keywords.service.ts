@@ -3,6 +3,7 @@ import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { PublishArticleKeywordsDto } from '../../publish-feed';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RmqContext } from '@nestjs/microservices';
+import { ConsumeMessage, Channel } from 'amqplib';
 import { ArticleRepository } from '../../shared';
 import OpenAI from 'openai';
 
@@ -21,8 +22,8 @@ export class PublishKeywordsService {
    * @param context the rmq context.
    */
   async publishKeywords(event: PublishArticleKeywordsDto, context: RmqContext) {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
+    const channel = context.getChannelRef() as Channel;
+    const originalMessage = context.getMessage() as ConsumeMessage;
     const startTime = Date.now();
 
     try {
@@ -67,7 +68,7 @@ export class PublishKeywordsService {
           'Requeue event due to too many request error.',
           PublishKeywordsService.name,
         );
-        channel.nack(originalMessage, false, true);
+        channel.nack(originalMessage, false, !originalMessage.fields.redelivered);
       } else {
         this.logger.error(`Publish keywords failed:`, error.stack, PublishKeywordsService.name);
         channel.nack(originalMessage, false, false);

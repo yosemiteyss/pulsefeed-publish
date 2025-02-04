@@ -10,6 +10,7 @@ import {
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ClientProxy, RmqContext } from '@nestjs/microservices';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { ConsumeMessage, Channel } from 'amqplib';
 import { ArticleRepository } from '../../shared';
 import { Prisma } from '@prisma/client';
 
@@ -53,8 +54,8 @@ export class PublishFeedService {
    * @param context rmq context for the message.
    */
   async publishFeed(event: PublishFeedDto, context: RmqContext) {
-    const channel = context.getChannelRef();
-    const originalMessage = context.getMessage();
+    const channel = context.getChannelRef() as Channel;
+    const originalMessage = context.getMessage() as ConsumeMessage;
     const startTime = Date.now();
 
     // Insert feed to db.
@@ -114,7 +115,7 @@ export class PublishFeedService {
           error.stack,
           PublishFeedService.name,
         );
-        channel.nack(originalMessage, false, true);
+        channel.nack(originalMessage, false, !originalMessage.fields.redelivered);
         return;
       }
 
