@@ -102,14 +102,17 @@ describe('TrendingKeywordsService', () => {
         score: 1,
         lastUpdated: new Date(),
       };
-      const keywordItems: CacheItem<TrendingKeyword>[] = Array.from({ length: 501 }, (_, i) => ({
-        key: `key-${i + 1}`,
-        value: {
-          keyword: `keyword-${i + 1}`,
-          score: i + 1,
-          lastUpdated: new Date('2024-01-01T00:00:00Z'),
-        },
-      }));
+      const keywordItems: CacheItem<TrendingKeyword>[] = Array.from(
+        { length: Object.keys(ArticleCategoryEnum).length * 200 + 1 },
+        (_, i) => ({
+          key: `key-${i + 1}`,
+          value: {
+            keyword: `keyword-${i + 1}`,
+            score: i + 1,
+            lastUpdated: new Date('2024-01-01T00:00:00Z'),
+          },
+        }),
+      );
       const languageKey = LanguageEnum.en_us;
       const categoryKey = ArticleCategoryEnum.HEALTH;
 
