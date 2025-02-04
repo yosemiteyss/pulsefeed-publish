@@ -9,7 +9,7 @@ export class TrendingKeywordsService {
    * Maximum number of cacheable keywords per language.
    * @private
    */
-  private readonly KEYWORD_CACHE_LIMIT_PER_LANG = 500;
+  private readonly KEYWORD_CACHE_LIMIT_PER_LANG = 2000;
 
   /**
    * Minimum trending score.
