@@ -1,4 +1,9 @@
-import { CacheItem, TrendingKeyword, TrendingKeywordsRepository } from '@pulsefeed/common';
+import {
+  ArticleCategoryEnum,
+  CacheItem,
+  TrendingKeyword,
+  TrendingKeywordsRepository,
+} from '@pulsefeed/common';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -9,7 +14,7 @@ export class TrendingKeywordsService {
    * Maximum number of cacheable keywords per language.
    * @private
    */
-  private readonly KEYWORD_CACHE_LIMIT_PER_LANG = 2000;
+  private readonly KEYWORD_CACHE_LIMIT_PER_LANG = Object.keys(ArticleCategoryEnum).length * 200;
 
   /**
    * Minimum trending score.
