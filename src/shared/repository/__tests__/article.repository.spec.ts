@@ -6,7 +6,7 @@ import {
   LanguageEnum,
   PrismaService,
 } from '@pulsefeed/common';
-import { Article as ArticleEntity, Feed as FeedEntity } from '@prisma/client';
+import { Article as ArticleEntity, Feed as FeedEntity, Prisma } from '@prisma/client';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { ArticleRepository } from '../article.repository';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -159,6 +159,42 @@ describe('ArticleRepository', () => {
           isPublished: true,
         },
       });
+    });
+  });
+
+  describe('getArticle', () => {
+    it('should get article by id', async () => {
+      const payload: Prisma.ArticleGetPayload<{
+        include: {
+          languages: true;
+        };
+      }> = {
+        ...mockedArticleEntity,
+        languages: [
+          {
+            articleId: mockedArticleEntity.id,
+            languageKey: LanguageEnum.en_us,
+          },
+          {
+            articleId: mockedArticleEntity.id,
+            languageKey: LanguageEnum.en_hk,
+          },
+        ],
+      };
+
+      prismaService.article.findFirst.mockResolvedValue(payload);
+
+      const result = await articleRepository.getArticle(mockedArticleEntity.id);
+
+      expect(prismaService.article.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: mockedArticleEntity.id,
+        },
+        include: {
+          languages: true,
+        },
+      });
+      expect(result).toEqual(article);
     });
   });
 });

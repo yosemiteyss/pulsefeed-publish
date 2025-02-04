@@ -108,4 +108,25 @@ export class ArticleRepository {
       },
     });
   }
+
+  /**
+   * Get article by id.
+   * @param articleId the article id.
+   */
+  async getArticle(articleId: string): Promise<Article | undefined> {
+    const entity = await this.prismaService.article.findFirst({
+      where: {
+        id: articleId,
+      },
+      include: {
+        languages: true,
+      },
+    });
+
+    if (!entity) {
+      return undefined;
+    }
+
+    return this.articleMapper.articlePayloadToModel(entity);
+  }
 }
