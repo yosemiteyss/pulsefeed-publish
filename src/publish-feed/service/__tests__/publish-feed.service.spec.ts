@@ -125,6 +125,25 @@ describe('PublishFeedService', () => {
       expect(channel.ack).toHaveBeenCalledWith(consumeMessage);
     });
 
+    it('should insert articles to db, but not publish keywords, when there is inserted keywords', async () => {
+      feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
+
+      for (const article of mockedFeed.articles) {
+        article.keywords = ['keyword-1', 'keyword-2'];
+      }
+      articleRepository.create.mockResolvedValue(mockedFeed.articles);
+
+      remoteConfigService.get.mockResolvedValue(true); // feature enabled
+      publishClient.emit.mockReturnValue(new Observable());
+
+      await publishFeedService.publishFeed(mockedFeed, context);
+
+      expect(articleRepository.create).toHaveBeenCalled();
+      expect(articleRepository.publish).toHaveBeenCalled();
+      expect(publishClient.emit).not.toHaveBeenCalled();
+      expect(channel.ack).toHaveBeenCalledWith(consumeMessage);
+    });
+
     it('should nack and not requeue for unknown error', async () => {
       feedRepository.upsert.mockResolvedValue(mockedFeed.feed);
       remoteConfigService.get.mockResolvedValue(false); // no keywords
