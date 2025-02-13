@@ -16,9 +16,6 @@ export class GenerateKeywordsService {
     apiKey: this.configService.get('OPEN_API_API_KEY'),
     timeout: 15000,
     maxRetries: 2,
-    // defaultHeaders: {
-    //   Authorization: `Bearer S1JCIb*OmnezA4J*kTrC84GxFwwyUbY3MgwYfbyzzp_8Gn1gsBy1ogROHqapzX0Ccdoyjkd$LKdR0`,
-    // },
   });
 
   /**
@@ -40,7 +37,7 @@ export class GenerateKeywordsService {
           content: prompt,
         },
       ],
-      model: 'gpt-3.5-turbo',
+      model: this.configService.get('OPEN_API_MODEL') ?? 'gpt-4o-mini',
     });
 
     const response = completion.choices[0].message.content;
