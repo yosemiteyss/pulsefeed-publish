@@ -1,9 +1,11 @@
 import { GenerateKeywordsService, TrendingKeywordsService } from './service';
-import { TrendingKeywordsRepository } from '@pulsefeed/common';
+import { RepositoryModule } from '@pulsefeed/common';
+import { ArticleRepository } from '../shared';
 import { Module } from '@nestjs/common';
 
 @Module({
-  providers: [GenerateKeywordsService, TrendingKeywordsService, TrendingKeywordsRepository],
+  imports: [RepositoryModule],
+  providers: [GenerateKeywordsService, TrendingKeywordsService, ArticleRepository],
   exports: [GenerateKeywordsService, TrendingKeywordsService],
 })
 export class TrendingModule {}

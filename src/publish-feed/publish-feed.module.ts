@@ -1,7 +1,7 @@
 import {
-  FeedRepository,
   PUBLISH_KEYWORDS_MSG_TTL,
   PUBLISH_KEYWORDS_QUEUE,
+  RepositoryModule,
   RMQ_CLIENT,
 } from '@pulsefeed/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -15,6 +15,7 @@ import { Module } from '@nestjs/common';
 @Module({
   imports: [
     TrendingModule,
+    RepositoryModule,
     ClientsModule.registerAsync([
       {
         name: RMQ_CLIENT,
@@ -36,6 +37,6 @@ import { Module } from '@nestjs/common';
     ]),
   ],
   controllers: [PublishFeedController],
-  providers: [FeedRepository, ArticleRepository, PublishFeedService],
+  providers: [ArticleRepository, PublishFeedService],
 })
 export class PublishFeedModule {}
