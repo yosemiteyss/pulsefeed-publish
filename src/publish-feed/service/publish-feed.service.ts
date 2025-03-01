@@ -29,25 +29,6 @@ export class PublishFeedService {
     private readonly remoteConfigService: RemoteConfigService,
   ) {}
 
-  // async onModuleInit() {
-  //   const trendingKeywords = await this.trendingKeywordsService.getTrendingKeywordsForLang('zh-hk');
-  //   this.logger.log(
-  //     `Trending: ${trendingKeywords.map((item) => `${item.keyword}:${item.score} `)}`,
-  //     PublishFeedService.name,
-  //   );
-  //
-  //   for (const category of Object.values(ArticleCategoryEnum)) {
-  //     const keywords = await this.trendingKeywordsService.getTrendingKeywordsForCategory(
-  //       'zh-hk',
-  //       category,
-  //     );
-  //     this.logger.log(
-  //       `[${category}]: ${keywords.map((item) => `${item.keyword}:${item.score} `)}`,
-  //       PublishFeedService.name,
-  //     );
-  //   }
-  // }
-
   /**
    * Handle the publishing of feed.
    * @param event the publish feed event.
