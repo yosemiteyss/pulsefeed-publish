@@ -22,9 +22,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup Github CLI
-        uses: sersoft-gmbh/setup-gh-cli-action@v2.0.1
-
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
@@ -41,11 +38,12 @@ jobs:
         run: npm run build
 
       - name: Update Package Version
-        uses: yosemiteyss/update-package-version@v1.0.0
+        uses: yosemiteyss/update-package-version@v1.0.4
         with:
+          runtime: node
           release_tag: ${{ github.event.inputs.release_tag }}
         env:
-          GITHUB_TOKEN: ${{ secrets.WRITE_REPO_PAT }}
+          WRITE_REPO_PAT: ${{ secrets.WRITE_REPO_PAT }}
 
       - name: Setup Version Name
         run: |
