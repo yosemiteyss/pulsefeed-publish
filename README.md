@@ -3,8 +3,11 @@
 ## Usage
 - Subscribe to message queue and publish data to database.
 
-### PATTERN_PUBLISH_FEED
+### PUBLISH_FEED_PATTERN
 - Consume scraped news articles, and insert to db.
+
+### PUBLISH_KEYWORDS_PATTERN
+- Consume publish keywords events, and generate keywords.
 
 ## Setup
 ```bash
