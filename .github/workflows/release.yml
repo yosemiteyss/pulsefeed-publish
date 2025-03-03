@@ -38,7 +38,7 @@ jobs:
         run: npm run build
 
       - name: Update Package Version
-        uses: yosemiteyss/update-package-version@v1.0.4
+        uses: yosemiteyss/update-package-version@v1.0.5
         with:
           runtime: node
           release_tag: ${{ github.event.inputs.release_tag }}
